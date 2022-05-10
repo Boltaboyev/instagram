@@ -1,0 +1,170 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+.header {
+    height: 60px;
+    width: 100%;
+    border-bottom: 1px solid #cacaca;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.logo {
+    position: absolute;
+    left: 100px;
+}
+
+.search {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.search img {
+    position: absolute;
+    left: 15px;
+    opacity: .3;
+}
+
+.search input {
+    height: 25px;
+    border: none;
+    outline: none;
+    padding: 5px;
+    background: #efefef;
+    width: 250px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.icon_list {
+    display: flex;
+    position: absolute;
+    right: 150px;
+}
+
+.icon_list li {
+    list-style: none;
+    margin: 0 15px;
+    opacity: 0.5;
+}
+
+
+.user {
+    padding: 1rem 6rem 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.user_box {
+    height: 250px;
+    width: 80%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid #cacaca;
+    position: relative;
+}
+
+.img {
+    position: absolute;
+    left: 100px;
+    height: 160px;
+    width: 160px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.img img {
+    height: 160px;
+    width: 160px;
+    border-radius: 50%;
+}
+
+.user_about {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 75%;
+    width: 40%;
+    padding: 2rem;
+    position: relative;
+}
+
+.user_about h3 {
+    color: #444;
+    font-family: system-ui;
+    font-size: 25px;
+    font-weight: 400;
+    position: absolute;
+    top: 50px;
+}
+
+.user_followers {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.user_followers li {
+    list-style: none;
+    font-family: sans-serif;
+    color: #444;
+    margin: 0 20px;
+}
+
+.user_followers li a {
+    text-decoration: none;
+    color: #444;
+}
+
+.post {
+    padding: 1rem 6rem 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.post_img {
+    width: 80%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: start;
+    align-items: center;
+    position: relative;
+}
+.posts{
+    height: 288px;
+    width: 288px;
+    margin: 5px 10px 10px 10px;
+    opacity: 1;
+    cursor: pointer;
+}
+.posts:hover {
+    opacity: .7;
+}
+.like {
+    height: 288px;
+    width: 288px;
+    background: rgb(16 0 255 / 61%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 5px;
+    left: 10px;
+}
+.like img {
+    height: 30px;
+    width: 50px;
+}       
