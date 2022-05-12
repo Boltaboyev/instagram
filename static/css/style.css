@@ -54,6 +54,10 @@
     opacity: 0.5;
 }
 
+.icon_list li:hover {
+    opacity: 1;
+}
+
 
 .user {
     padding: 1rem 6rem 0;
@@ -143,28 +147,283 @@
     align-items: center;
     position: relative;
 }
-.posts{
+
+.posts {
     height: 288px;
     width: 288px;
     margin: 5px 10px 10px 10px;
-    opacity: 1;
-    cursor: pointer;
 }
-.posts:hover {
-    opacity: .7;
+
+.none {
+    display: block;
 }
+
+
 .like {
     height: 288px;
     width: 288px;
-    background: rgb(16 0 255 / 61%);
-    display: flex;
+    background: rgba(0, 0, 0, 0.829);
+    display: none;
     justify-content: center;
     align-items: center;
     position: absolute;
     top: 5px;
     left: 10px;
+    cursor: pointer;
 }
-.like img {
+
+.like svg {
     height: 30px;
-    width: 50px;
-}       
+    width: 30px;
+    margin: 0 20px;
+    fill: #fff;
+}
+
+.img_hover {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.img_hover:hover .like {
+    display: flex;
+}
+
+
+.followers {
+    padding: 5rem 5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.follow_box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.fw_item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 15px 0 15px 0;
+    width: 120%;
+    height: 80px;
+    position: relative;
+}
+
+.fw_img {
+    background: url('../icon/circle_user_solid.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 80px;
+    width: 80px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    left: -50px;
+}
+
+.fw_img img {
+    height: 80px;
+    width: 80px;
+    border-radius: 50%;
+}
+
+.fw_txt {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 100px 0 50px;
+}
+
+.fw_txt h2 {
+    color: #000;
+    font-family: system-ui;
+    margin-bottom: 5px;
+}
+
+.fw_txt p {
+    color: #444;
+    font-family: serif;
+}
+
+.fw_item a {
+    padding: 10px 25px;
+    background: #62a1fe;
+    color: #fff;
+    font-family: system-ui;
+    text-decoration: none;
+    border-radius: 5px;
+    position: absolute;
+    right: -20px;
+}
+
+.fw_item a:hover {
+    background: blue;
+}
+
+
+
+
+
+.login {
+    padding: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+
+.wrapper {
+    max-width: 700px;
+    width: 90%;
+    margin: 0 auto;
+}
+
+.or {
+    padding: 35px 20px;
+    position: relative;
+}
+
+.or:after {
+    content: "";
+    width: 100%;
+    height: 1px;
+    background: #adadad;
+    border-radius: 20px;
+    display: block;
+}
+
+.or span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    color: #a3a3a3;
+    padding: 0 10px;
+}
+
+.card-body {
+    flex: 1 1 auto;
+    padding: 10px 10px !important;
+}
+
+.primaryColor,
+.secondaryColor {
+    padding: 0 10px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.primaryColor {
+    color: #0d6efd;
+}
+
+.secondaryColor {
+    color: #172f80;
+}
+
+.form-control {
+    border-radius: 3px;
+    border: 1px solid #cfcfcf;
+    box-shadow: none !important;
+    height: 40px;
+}
+.cursor {
+    cursor: auto;
+}
+
+
+
+.new_posts {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    transform-origin: right;
+    padding: 2em;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.849);
+    width: 100vw;
+    height: 100vh;
+    z-index: 10;
+}
+
+.display {
+    display: flex;
+}
+
+.post_box {
+    height: 450px;
+    width: 438px;
+    background: #fff;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.post_box h3 {
+    color: #444;
+    font-family: system-ui;
+    text-align: center;
+    margin: 10px 0 10px;
+    font-size: 17px;
+    font-weight: 500;
+    position: absolute;
+    top: 5px;
+}
+
+.post_box h4 {
+    color: #666;
+    font-family: system-ui;
+    text-align: center;
+    font-weight: 300;
+    font-size: 20px;
+    margin-bottom: 30px;
+}
+
+.line {
+    opacity: .6;
+    height: 1px;
+    width: 100%;
+    background: #444;
+    margin-bottom: 50%;
+    position: absolute;
+    top: 50px;
+}
+
+.x_solid {
+    position: absolute;
+    right: 120px;
+    top: 15px;
+}
+
+.x_solid img {
+    height: 30px;
+    cursor: pointer;
+}
+
+#label {
+    padding: 5px 10px;
+    background: #0095f6;
+    color: #fff;
+    font-family: system-ui;
+    border-radius: 5px;
+}
+.lk {
+    text-decoration: none;
+}
