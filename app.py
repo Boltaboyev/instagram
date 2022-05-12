@@ -26,7 +26,7 @@ def register():
 
 @app.route('/follow')
 def follow():
-    return render_template('explore.html')
+    return render_template('follow.html')
 
 
 @app.route('/explore')

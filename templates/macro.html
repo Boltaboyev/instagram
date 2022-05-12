@@ -1,0 +1,32 @@
+{% macro links(user) %}
+
+
+    <header class="header">
+
+        <div class="logo">
+            <a href="#"><img src="../static/img/instagramm/instagramm.png" alt=""></a>
+        </div>
+
+        <div class="search">
+
+            <img src="../static/icon/search.svg" alt="" width="20px">
+
+            <input type="text" placeholder="search">
+
+        </div>
+
+        <ul class="icon_list">
+            <li><a href="{{ url_for('home') }}"><img src="../static/icon/house_solid.svg" alt="" height="25px"></a>
+            </li>
+            <li><a href="{{ url_for('explore') }}"><img src="../static/icon/compass_bold.svg" alt=""
+                                                        height="25px"></a></li>
+            <li class="add_post"><img src="../static/icon/plus_solid.svg" alt="" height="25px"></li>
+            <li><a href="{{ url_for('follow') }}"><img src="../static/icon/heart_solid.svg" alt=""
+                                                       height="25px"></a></li>
+            <li><a href="{{ url_for('user') }}"><img src="../static/icon/circle_user_solid.svg" alt=""
+                                                     height="25px"></a></li>
+        </ul>
+
+    </header>
+
+{% endmacro %}
