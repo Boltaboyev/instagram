@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask,redirect,url_for,render_template
 from config import *
 from models import *
 from flask_migrate import *
@@ -10,8 +10,33 @@ db = setup(app)
 
 
 @app.route('/')
-def hello_world():
-    return "hello world"
+def home():
+    return render_template('home.html')
+
+
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
+
+@app.route('/register')
+def register():
+    return render_template('register.html')
+
+
+@app.route('/follow')
+def follow():
+    return render_template('explore.html')
+
+
+@app.route('/explore')
+def explore():
+    return render_template('explore.html')
+
+
+@app.route('/user')
+def user():
+    return render_template('user.html')
 
 
 manager = Manager(app)
