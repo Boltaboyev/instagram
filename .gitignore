@@ -1,0 +1,4 @@
+/.idea
+/flask_project
+/migrations
+__pycache__/
