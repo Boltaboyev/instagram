@@ -6,14 +6,16 @@
     <section class="home">
 
         <div class="new_massage">
-
-            <div class="story">
-                <div class="people">
-                    <div class="people_img">
-                        <img src="../static/img/person/pic-3.png" alt="">
+            {%if user%}
+                <div class="story">
+                    <div class="people">
+                        <div class="people_img">
+                            <img src="../{{user.img}}" alt="">
+                        </div>
+                        <p>{{user.username}}</p>
                     </div>
-                    <p>Otabek</p>
                 </div>
+<<<<<<< HEAD
                 <div class="people">
                     <div class="people_img">
                         <img src="../static/img/person/pic-4.png" alt="">
@@ -45,6 +47,8 @@
                     <p>Elon</p>
                 </div>
             </div>
+            {%endif%}
+
 
 
             <div class="msg_post">
@@ -62,8 +66,6 @@
                 </div>
 
             </div>
-
-        </div>
 
         <div class="suggest">
 
