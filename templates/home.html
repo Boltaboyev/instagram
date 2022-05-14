@@ -6,15 +6,16 @@
     <section class="home">
 
         <div class="new_massage">
-
-            <div class="story">
-                <div class="people">
-                    <div class="people_img">
-                        <img src="../{{user.img}}" alt="">
+            {%if user%}
+                <div class="story">
+                    <div class="people">
+                        <div class="people_img">
+                            <img src="../{{user.img}}" alt="">
+                        </div>
+                        <p>{{user.username}}</p>
                     </div>
-                    <p>{{user.username}}</p>
                 </div>
-            </div>
+            {%endif%}
 
 
             <div class="msg_post">

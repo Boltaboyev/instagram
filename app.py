@@ -100,6 +100,12 @@ def user():
     return render_template('user.html')
 
 
+@app.route('/logout')
+def logout():
+    session.pop('user', None)
+    return redirect(url_for('home'))
+
+
 manager = Manager(app)
 manager.add_command('db', MigrateCommand)
 
