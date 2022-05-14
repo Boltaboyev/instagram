@@ -58,27 +58,54 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card my-2">
+
+                    {% for msg in get_flashed_messages() %}
+                        <p>{{ msg }}</p>
+                    {% endfor %}
+
+
+                    <form method="post" action="{{ url_for('register') }}">
                         <div class="card-body">
+
                             <span>Already Have an Account?</span><a class="lk" href="../templates/login.html"><span class="primaryColor">Login</span></a>
                         </div>
+
+                    </form>
+
+                    <div class="or">
+                        <span>OR</span>
                     </div>
-                    <span class="primaryColor">Get the App</span>
-                    <div class="row py-2">
-                        <div class="col-6"><img src="../static/img/login/playstore.png" alt="[+]"
-                                class="img-fluid d-block rounded" />
-                        </div>
-                        <div class="col-6"><img src="../static/img/login/appstore.png" alt="[+]"
-                                class="img-fluid d-block rounded" />
+                    <div class="otherMethods">
+                        <div class="secondaryColor">
+                            <img src="../static/img/login/facebook-logo.png" class="img-fluid rounded" alt="[+]"
+                                 style="width: 18px;height: 18px">
+                            <span class="ms-2">Login with Facebook</span>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- </div> -->
+            <div class="card my-2">
+                <div class="card-body">
+                    <span>Don't Have an Account?</span><a class="lk" href="../templates/login.html"><span
+                        class="primaryColor">Login</span></a>
+                </div>
+            </div>
+            <span class="primaryColor">Get the App</span>
+            <div class="row py-2">
+                <div class="col-6"><img src="../static/img/login/playstore.png" alt="[+]"
+                                        class="img-fluid d-block rounded"/>
+                </div>
+                <div class="col-6"><img src="../static/img/login/appstore.png" alt="[+]"
+                                        class="img-fluid d-block rounded"/>
+                </div>
+            </div>
         </div>
-    </section>
+    </div>
+    <!-- </div> -->
+    </div>
+</section>
 
-    <script src="../static/js/app.js"></script>
+<script src="../static/js/app.js"></script>
 </body>
 
 </html>

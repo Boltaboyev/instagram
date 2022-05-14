@@ -1,13 +1,25 @@
+
 from flask import Flask, redirect, url_for, render_template, flash
+
+
 from config import *
 from models import *
 from flask_migrate import *
 from flask_script import *
+
 from werkzeug.utils import secure_filename
+
 
 app = Flask(__name__)
 app.config.from_object('config')
 db = setup(app)
+app.config['SECRET_KEY'] = 'dfjkdfohhdfiih'
+
+
+def get_user():
+    if "user" in session:
+        username = Users.query.filter_by(name=session['user']).first()
+        return username
 
 
 def get_current_user():
@@ -21,10 +33,11 @@ def get_current_user():
 
 @app.route('/')
 def home():
-    return render_template('home.html')
+    user = get_current_user()
+    return render_template('home.html', user=user)
 
 
-@app.route('/login')
+@app.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
         name = request.form.get('username')
@@ -74,7 +87,7 @@ def register():
 
 @app.route('/follow')
 def follow():
-    return render_template('follow.html')
+    return render_template('explore.html')
 
 
 @app.route('/explore')

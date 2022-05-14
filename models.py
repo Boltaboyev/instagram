@@ -30,7 +30,7 @@ class Posts(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     post = db.Column(db.String())
     post_owner = db.Column(db.Integer, db.ForeignKey('users.id'))
-    post_likes = db.relationship("Likes", backref="likes_owner")
+    post_like = db.relationship("Likes", backref="likes_owner")
 
 
 class Subscribers(db.Model):
@@ -42,7 +42,7 @@ class Subscribers(db.Model):
 class Likes(db.Model):
     __tablename__ = 'likes'
     id = db.Column(db.Integer, primary_key=True)
-    likes_owner = db.Column(db.Integer, db.ForeignKey('posts.id'))
+    like_owner = db.Column(db.Integer, db.ForeignKey('posts.id'))
 
 
 class Subscriptions(db.Model):
