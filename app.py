@@ -1,12 +1,12 @@
-from flask import Flask,redirect,url_for,render_template
-from config import *
-from models import *
+from flask import Flask, redirect, url_for, render_template
 from flask_migrate import *
-from flask_script import *
+from flask_script import Manager
+from models import *
+from config import *
 
 app = Flask(__name__)
-app.config.from_object('config')
 db = setup(app)
+app.config.from_object('config')
 
 
 @app.route('/')

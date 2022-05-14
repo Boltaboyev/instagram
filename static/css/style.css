@@ -90,6 +90,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    background: url("../icon/circle_user_solid.svg");
 }
 
 .img img {
@@ -162,6 +163,81 @@ body {
     display: block;
 }
 
+.change_photo {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    padding: 2em;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.71);
+    width: 100vw;
+    height: 100vh;
+    z-index: 10;
+}
+
+.active_flex {
+    display: flex;
+}
+
+.change_box {
+    height: 210px;
+    width: 360px;
+    background: #fff;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.change_box_text h4 {
+    font-family: sans-serif;
+    color: #333;
+    padding: 20px;
+}
+
+.upload {
+    color: #0095f6;
+    font-family: system-ui;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.remove a {
+    color: #ed4956;
+    font-family: system-ui;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.cancel p {
+    color: #333;
+    font-family: system-ui;
+    font-weight: 500;
+}
+
+.border_bt {
+    border-bottom: 1px solid rgba(153, 153, 153, 0.78);
+    width: 94%;
+    text-align: center;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.upload,
+.remove,
+.cancel {
+    cursor: pointer;
+}
+
+.cancel {
+    border-bottom: none !important;
+}
 
 .like {
     height: 288px;
@@ -453,18 +529,20 @@ body {
     display: flex;
     align-items: center;
     padding: 0 2rem;
+    overflow: hidden;
 }
 
 .people {
-    width: 125px;
+    width: 100px;
     overflow: hidden;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
+
 .people p {
-    text-align: center;
+    text-align: left;
     font-family: system-ui;
     color: #6c757d;
     font-size: 14px;
@@ -480,6 +558,7 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
 }
 
 .people img {
