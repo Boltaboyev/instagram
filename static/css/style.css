@@ -508,7 +508,7 @@ body {
 .home {
     padding: 2rem 10rem;
     display: flex;
-    align-items: center;
+    justify-content: center;
     background: #fafafa;
 }
 
@@ -518,10 +518,11 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    margin-right: 400px;
 }
 
 .story {
-    width: 100%;
+    width: 90%;
     height: 120px;
     background: #fff;
     border: 1px solid rgb(219, 219, 219);
@@ -529,7 +530,7 @@ body {
     display: flex;
     align-items: center;
     padding: 0 2rem;
-    overflow: hidden;
+    margin-bottom: 30px;
 }
 
 .people {
@@ -566,3 +567,87 @@ body {
     width: 67px;
     border-radius: 50%;
 }
+
+.msg_post {
+    width: 100%;
+}
+
+.msg_post_box {
+    height: 620px;
+    width: 100%;
+    background: #fff;
+    border: 1px solid rgb(219, 219, 219);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 0 30px;
+}
+
+.owner_name {
+    width: 92%;
+    height: 60px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+}
+
+.owner_img {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 30px;
+}
+
+.owner_img img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+.owner_name p {
+    color: #000;
+    font-family: system-ui;
+}
+
+.owner_post {
+    width: 100%;
+    height: 80%;
+}
+
+.owner_post img {
+    width: 100%;
+    height: 100%;
+}
+
+.owner_post_like {
+    width: 94.8%;
+    height: 65px;
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
+    position: relative;
+}
+
+.like_bold {
+    height: 30px;
+    width: 30px;
+    margin-right: 20px;
+}
+
+.like_bold svg {
+    cursor: pointer;
+}
+
+.heart {
+    fill: #6c757d;
+}
+
+.owner_post_like p {
+    color: #222;
+    font-family: system-ui;
+}
+

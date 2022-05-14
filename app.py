@@ -1,9 +1,6 @@
-
 from flask import Flask, redirect, url_for, render_template
 
-
 from flask import Flask, redirect, url_for, render_template, flash
-
 
 from config import *
 from models import *
@@ -14,7 +11,6 @@ from models import *
 from config import *
 
 from werkzeug.utils import secure_filename
-
 
 app = Flask(__name__)
 db = setup(app)
@@ -37,7 +33,6 @@ def get_current_user():
         user = Users.query.filter_by(username=user).first()
         user_query = user
     return user_query
-
 
 
 @app.route('/')
@@ -71,7 +66,7 @@ def register():
         filename = secure_filename(photo.filename)
         photo.save(os.path.join("static/img/person", filename))
         file_url = "static/img/person"
-        result = file_url+'/'+filename
+        result = file_url + '/' + filename
         if len(email) <= 4:
             flash('Email must be greater than 4 characters', category='error')
         elif len(username) <= 2:
