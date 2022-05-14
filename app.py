@@ -1,12 +1,14 @@
-from flask import Flask, flash
+
+from flask import Flask, redirect, url_for, render_template, flash
+
 
 from config import *
 from models import *
 from flask_migrate import *
 from flask_script import *
-from config import *
 
-# from werkzeug import
+from werkzeug.utils import secure_filename
+
 
 app = Flask(__name__)
 app.config.from_object('config')
@@ -20,48 +22,67 @@ def get_user():
         return username
 
 
+def get_current_user():
+    user_query = None
+    if 'user' in session:
+        user = session['user']
+        user = Users.query.filter_by(username=user).first()
+        user_query = user
+    return user_query
+
+
 @app.route('/')
 def home():
-    return render_template('home.html')
-
-
-
-
-@app.route('/register', methods=["POST", "GET"])
-def register():
-    if request.method == 'POST':
-        request_pass = request.form.get('password')
-        name = request.form.get('name')
-        if len(request_pass) > 7:
-            flash('Welcome to instagramm')
-            gen_pass = generate_password_hash(request_pass, method='sha256')
-            user_data = Users(name=name, password=gen_pass)
-            db.session.add(user_data)
-            db.session.commit()
-            return redirect(url_for('register'))
-        else:
-            flash('Password must 8 character or more.')
-
-    return render_template('register.html')
+    user = get_current_user()
+    return render_template('home.html', user=user)
 
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
-    user = get_user()
     if request.method == 'POST':
-        name = request.form.get('name')
+        name = request.form.get('username')
         password = request.form.get('password')
-        get_user_name = Users.query.filter_by(name=name).first()
-        if get_user_name:
-            if check_password_hash(get_user_name.password, password):
-                session['user'] = get_user_name.name
-                print(session['user'])
+        get_user = Users.query.filter_by(username=name).first()
+        if get_user:
+            if check_password_hash(get_user.password, password):
+                session['user'] = get_user.username
                 return redirect(url_for('home'))
-            else:
-                flash('wrong password.Please change your password !!!')
+            return redirect(url_for('login'))
+    return render_template('login.html')
+
+
+@app.route('/register', methods=['POST', 'GET'])
+def register():
+    if request.method == 'POST':
+        email = request.form.get('email')
+        username = request.form.get('username')
+        password = request.form.get('password')
+        password2 = request.form.get('re-password')
+        photo = request.files['image_user']
+        filename = secure_filename(photo.filename)
+        photo.save(os.path.join("static/img/person", filename))
+        file_url = "static/img/person"
+        result = file_url+'/'+filename
+        if len(email) <= 4:
+            flash('Email must be greater than 4 characters', category='error')
+        elif len(username) <= 2:
+            flash(
+                'Username must be greater than 2 characters', category='error')
+        elif len(password) <= 4:
+            flash('Password must be greater than 4 characters', category='error')
+        elif password != password2:
+            flash('Password do not match', category='error')
         else:
-            flash('User name is not found !!!')
-    return render_template('login.html', user=user)
+            new_user = Users(email=email, username=username,
+                             password=generate_password_hash(password, method='sha256'), img=result)
+            db.session.add(new_user)
+            db.session.commit()
+
+            flash('Account created', category='success')
+        get_user = Users.query.filter_by(username=username).first()
+        session['user'] = get_user.username
+        return redirect(url_for('login'))
+    return render_template('register.html')
 
 
 @app.route('/follow')
