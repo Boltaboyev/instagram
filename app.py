@@ -89,9 +89,31 @@ def register():
     return render_template('register.html')
 
 
-@app.route('/follow')
-def follow():
-    return render_template('explore.html')
+@app.route('/subscribe')
+def subscriber():
+    current_user = get_current_user()
+    users = Users.query.all()
+    return render_template('follow.html', users=users, current_user=current_user)
+
+
+@app.route('/subscribers/<int:user_id>')
+def subscribers(user_id):
+    current_user = get_current_user()
+    users = Users.query.all()
+    owner = Subscriptions.query.filter_by(owner_id=user_id).all()
+
+    print(owner)
+    return render_template('followers.html', current_user=current_user, users=users, owner=owner)
+
+
+@app.route('/follow/<int:subscribed_id>')
+def follow(subscribed_id):
+    current_user = get_current_user()
+    follow = Subscriptions(owner_id=current_user.id,
+                           subscriptions_owner2=subscribed_id)
+    db.session.add(follow)
+    db.session.commit()
+    return redirect(url_for('home'))
 
 
 @app.route('/explore')
