@@ -132,10 +132,16 @@ def user():
     print(user)
     if request.method == "POST":
         photo = request.files['update']
+        get_userId = Users.query.filter_by(id=user.id).first()
+
+        if os.path.exists(get_userId.img):
+            os.remove(get_userId.img)
+
         filename = secure_filename(photo.filename)
         photo.save(os.path.join("static/img/person", filename))
         file_url = "static/img/person"
         result = file_url+'/'+filename
+        
         Users.query.filter_by(id=user.id).update({"img":result})
         db.session.commit()
         return redirect(url_for('user',user=user))
@@ -146,9 +152,9 @@ def user():
 def remove_img():
     user = get_current_user()
     dele_img = Users.query.filter_by(id=user.id).first()
-    dele_img.img = None
+    dele_img.img = ""
     db.session.commit()
-    return render_template('user.html',user=user)
+    return redirect(url_for("user"),user=user)
 
 
 @app.route('/logout')

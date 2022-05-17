@@ -5,8 +5,9 @@
         <section class="user">
             <div class="user_box">
                 <div class="img">
-
-                    <img src="../static/img/person/pic-1.png" alt="">
+                    {% if  userimg %}
+                        <img src="{{user.img}}" alt="">
+                    {% endif %}
                 </div>
                 <div class="user_about">
                     <h3>{{ user.username}}</h3>
@@ -17,7 +18,7 @@
                     </ul>
                 </div>
             </div>
-        </section>
+        </section>  
         <section class="change_photo">
             <div class="change_box">
                 <div class="change_box_text border_bt">
@@ -36,9 +37,6 @@
                     <a href="{{url_for('remove_img')}}">Remove Current Photo</a>
                 <input id="change_file" hidden type="file">
 
-                <div class="remove border_bt">
-                    <a href="#">Remove Current Photo</a>
-                </div>
                 <div class="cancel border_bt">
                     <p>Cancel</p>
                 </div>
@@ -48,9 +46,9 @@
 
     <div class="container">
         <section class="post">
-        {% for post in posts %}
 
             <div class="post_img">
+        {% for post in posts %}
 
                 <div class="img_hover">
                     <div class="like">
@@ -68,7 +66,8 @@
                     <img class="posts" src="{{ post.post_img}}" alt="">
                 </div>
         {% endfor %}
-               
+
+
         </section>
     </div>
 
