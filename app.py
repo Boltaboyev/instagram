@@ -1,3 +1,4 @@
+import re
 from flask import Flask, redirect, url_for, render_template
 
 from flask import Flask, redirect, url_for, render_template, flash
@@ -11,13 +12,13 @@ from models import *
 from config import *
 
 from werkzeug.utils import secure_filename
-
 app = Flask(__name__)
 db = setup(app)
 
 app.config.from_object('config')
 
 app.config['SECRET_KEY'] = 'dfjkdfohhdfiih'
+
 
 
 def get_user():
@@ -33,7 +34,6 @@ def get_current_user():
         user = Users.query.filter_by(username=user).first()
         user_query = user
     return user_query
-
 
 @app.route('/')
 def home():
@@ -55,6 +55,7 @@ def login():
     return render_template('login.html')
 
 
+
 @app.route('/register', methods=['POST', 'GET'])
 def register():
     if request.method == 'POST':
@@ -66,6 +67,7 @@ def register():
         filename = secure_filename(photo.filename)
         photo.save(os.path.join("static/img/person", filename))
         file_url = "static/img/person"
+
         result = file_url + '/' + filename
         if len(email) <= 4:
             flash('Email must be greater than 4 characters', category='error')
@@ -83,9 +85,10 @@ def register():
             db.session.commit()
 
             flash('Account created', category='success')
-        get_user = Users.query.filter_by(username=username).first()
-        session['user'] = get_user.username
-        return redirect(url_for('login'))
+
+            get_user = Users.query.filter_by(username=username).first()
+            session['user'] = get_user.username
+            return redirect(url_for('login'))
     return render_template('register.html')
 
 
@@ -135,9 +138,31 @@ def explore():
     return render_template('explore.html')
 
 
-@app.route('/user')
+@app.route('/user',methods=["POST","GET"])
 def user():
-    return render_template('user.html')
+    user = get_current_user()
+    posts = Posts.query.filter_by(post_owner=user.id).all()
+
+    print(user)
+    if request.method == "POST":
+        photo = request.files['update']
+        filename = secure_filename(photo.filename)
+        photo.save(os.path.join("static/img/person", filename))
+        file_url = "static/img/person"
+        result = file_url+'/'+filename
+        Users.query.filter_by(id=user.id).update({"img":result})
+        db.session.commit()
+        return redirect(url_for('user',user=user))
+    return render_template('user.html',user=user,posts=posts)
+
+
+@app.route('/remove_img')
+def remove_img():
+    user = get_current_user()
+    dele_img = Users.query.filter_by(id=user.id).first()
+    dele_img.img = None
+    db.session.commit()
+    return render_template('user.html',user=user)
 
 
 @app.route('/logout')
@@ -145,6 +170,22 @@ def logout():
     session.pop('user', None)
     return redirect(url_for('home'))
 
+
+@app.route('/posts',methods=["POST",'GET'])
+def add_post():
+    user = get_current_user()
+    
+    if request.method == 'POST':
+        comment = request.form.get("comment")
+        photo = request.files['post']
+        filename = secure_filename(photo.filename)
+        photo.save(os.path.join("static/img/person", filename))
+        file_url = "static/img/person"
+        result = file_url+'/'+filename
+        add = Posts(post_img=result, post_owner=user.id,post_comment=comment)
+        db.session.add(add)
+        db.session.commit()
+    return redirect(url_for("home"))
 
 manager = Manager(app)
 manager.add_command('db', MigrateCommand)

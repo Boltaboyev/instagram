@@ -26,7 +26,8 @@
                             <img src="../static/img/login/instagram-logo.png" alt="card-img-top">
                         </div>
                         <div class="card-body">
-                            <form method="post" action="">
+                            <form method="post" action="{{url_for('login')}}">
+
                                 <div class="form-group py-1">
                                     <input type="text" class="form-control" name="username" id="" aria-describedby="helpId"
                                         placeholder="Username">
@@ -35,27 +36,15 @@
                                     <input type="password" class="form-control" name="password" id="" aria-describedby="helpId"
                                         placeholder="Password">
                                 </div>
-                                <input type="submit" value="Log In" class="mt-2 btn btn-primary w-100 disabled">
+                                <input type="submit" value="Log In" class="mt-2 btn btn-primary w-100 ">
+
                             </form>
                             <div class="or">
                                 <span>OR</span>
 
+                        
 
-
-                        {% for msg in get_flashed_messages() %}
-                            <p>{{ msg }}</p>
-                        {% endfor %}
-
-                            </div>
-                            <div class="form-group py-1">
-                                <input type="password" class="for7`m-control" name="password"
-                                       placeholder="Password">
-                            </div>
-                            <input type="submit" value="Log In" class="mt-2 btn btn-primary w-100 ">
-                        </form>
-
-                        <div class="or">
-                            <span>OR</span>
+                           
                         </div>
                         <div class="otherMethods">
                             <div class="secondaryColor">

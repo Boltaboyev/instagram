@@ -21,16 +21,17 @@
             <li><a href="{{ url_for('explore') }}"><img src="../static/icon/compass_bold.svg" alt=""
                                                         height="25px"></a></li>
             <li class="add_post"><img src="../static/icon/plus_solid.svg" alt="" height="25px"></li>
+
             <li><a href="#"><img src="../static/icon/heart_solid.svg" alt=""
                                                        height="25px"></a></li>
             <li><a href="{{ url_for('user') }}"><img src="../static/icon/circle_user_solid.svg" alt=""
                                                      height="25px"></a></li>
-            {%if user%}
+            {%if user %}
                 <li><a href="{{url_for('logout')}}">Logout</a></li>
             {%else%}
                 <li><a href="{{url_for('register')}}">Register</a></li>
                 <li><a href="{{url_for('login')}}">Login</a></li>
-            {%endif%}
+            {% endif %}
             
         </ul>
 
