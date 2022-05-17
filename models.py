@@ -33,6 +33,7 @@ class Posts(db.Model):
     post_comment = db.Column(db.String())
     post_owner = db.Column(db.Integer, db.ForeignKey('users.id'))
     post_like = db.relationship("Likes", backref="likes_owner")
+    post_head = db.Column(db.Boolean())
 
 
 class Likes(db.Model):

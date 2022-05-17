@@ -6,7 +6,10 @@
             <div class="user_box">
                 <div class="img">
 
-                    <img src="{{user.img}}" alt="">
+                    {% if  user.img %}
+                        <img src="{{user.img}}" alt="">
+                    {% endif %}
+
                 </div>
                 <div class="user_about">
                     <h3>{{ user.username}}</h3>
@@ -17,7 +20,7 @@
                     </ul>
                 </div>
             </div>
-        </section>
+        </section>  
         <section class="change_photo">
             <div class="change_box">
                 <div class="change_box_text border_bt">
@@ -36,9 +39,6 @@
                     <a href="{{url_for('remove_img')}}">Remove Current Photo</a>
                 <input id="change_file" hidden type="file">
 
-                <div class="remove border_bt">
-                    <a href="#">Remove Current Photo</a>
-                </div>
                 <div class="cancel border_bt">
                     <p>Cancel</p>
                 </div>
@@ -53,6 +53,7 @@
 
             
 
+
                 <div class="img_hover">
                     <div class="like">
                         <a href="{{url_for('like', post_id=post.id)}}"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
@@ -66,10 +67,12 @@
                                     d="M256 32C114.6 32 .0272 125.1 .0272 240c0 47.63 19.91 91.25 52.91 126.2c-14.88 39.5-45.87 72.88-46.37 73.25c-6.625 7-8.375 17.25-4.625 26C5.818 474.2 14.38 480 24 480c61.5 0 109.1-25.75 139.1-46.25C191.1 442.8 223.3 448 256 448c141.4 0 255.1-93.13 255.1-208S397.4 32 256 32zM256.1 400c-26.75 0-53.12-4.125-78.38-12.12l-22.75-7.125l-19.5 13.75c-14.25 10.12-33.88 21.38-57.5 29c7.375-12.12 14.37-25.75 19.88-40.25l10.62-28l-20.62-21.87C69.82 314.1 48.07 282.2 48.07 240c0-88.25 93.25-160 208-160s208 71.75 208 160S370.8 400 256.1 400z"></path>
                         </svg>
                     </div>
-                    <img class="posts" src="{{ post.post_img}}" alt="">
-                
+
+                        <img class="posts" src="{{ post.post_img}}" alt="">
+                        <a href="{{url_for('heade_post',get_id=post.id)}}">Headen Post</a>
+                </div>
         {% endfor %}
-               </div>
+
         </section>
     </div>
 

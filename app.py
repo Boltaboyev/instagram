@@ -1,7 +1,10 @@
+from urllib import request
+
+from flask import Flask, redirect, url_for, render_template, session, request
 import re
 from flask import Flask, redirect, url_for, render_template
-
 from flask import Flask, redirect, url_for, render_template, flash
+from werkzeug.security import check_password_hash, generate_password_hash
 
 from config import *
 from models import *
@@ -12,6 +15,7 @@ from models import *
 from config import *
 
 from werkzeug.utils import secure_filename
+
 app = Flask(__name__)
 db = setup(app)
 
@@ -149,6 +153,11 @@ def user():
     print(user)
     if request.method == "POST":
         photo = request.files['update']
+        get_userId = Users.query.filter_by(id=user.id).first()
+
+        if os.path.exists(get_userId.img):
+            os.remove(get_userId.img)
+
         filename = secure_filename(photo.filename)
         photo.save(os.path.join("static/img/person", filename))
         file_url = "static/img/person"
@@ -163,9 +172,10 @@ def user():
 def remove_img():
     user = get_current_user()
     dele_img = Users.query.filter_by(id=user.id).first()
-    dele_img.img = None
+    dele_img.img = ""
     db.session.commit()
-    return render_template('user.html', user=user)
+
+    return redirect(url_for("user"), user=user)
 
 
 @app.route('/logout')
@@ -184,11 +194,29 @@ def add_post():
         filename = secure_filename(photo.filename)
         photo.save(os.path.join("static/img/person", filename))
         file_url = "static/img/person"
-        result = file_url+'/'+filename
+
+        result = file_url + '/' + filename
+
         add = Posts(post_img=result, post_owner=user.id, post_comment=comment)
         db.session.add(add)
         db.session.commit()
     return redirect(url_for("user"))
+
+
+@app.route('/heade_post/<int:get_id>')
+def heade_post(get_id):
+    user = get_current_user()
+    post = Posts.query.filter_by(id=get_id).first()
+    print(post)
+    if post.post_head:
+        post.post_head = False
+        db.session.commit()
+        return redirect(url_for('user', user=user))
+
+    else:
+        post.post_head = True
+        db.session.commit()
+        return redirect(url_for('user', user=user))
 
 
 manager = Manager(app)
