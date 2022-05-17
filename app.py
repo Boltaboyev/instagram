@@ -1,6 +1,9 @@
-from flask import Flask, redirect, url_for, render_template
+from urllib import request
+
+from flask import Flask, redirect, url_for, render_template, session
 
 from flask import Flask, redirect, url_for, render_template, flash
+from werkzeug.security import check_password_hash
 
 from config import *
 from models import *
@@ -18,12 +21,6 @@ db = setup(app)
 app.config.from_object('config')
 
 app.config['SECRET_KEY'] = 'dfjkdfohhdfiih'
-
-
-def get_user():
-    if "user" in session:
-        username = Users.query.filter_by(name=session['user']).first()
-        return username
 
 
 def get_current_user():
