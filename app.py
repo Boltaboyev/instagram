@@ -20,13 +20,6 @@ app.config.from_object('config')
 app.config['SECRET_KEY'] = 'dfjkdfohhdfiih'
 
 
-
-def get_user():
-    if "user" in session:
-        username = Users.query.filter_by(name=session['user']).first()
-        return username
-
-
 def get_current_user():
     user_query = None
     if 'user' in session:
@@ -35,10 +28,17 @@ def get_current_user():
         user_query = user
     return user_query
 
+
 @app.route('/')
 def home():
     user = get_current_user()
-    return render_template('home.html', user=user)
+    if user:
+        users = Users.query.all()
+        owner = Subscriptions.query.filter_by(
+            subscriptions_owner2=user.id).all()
+
+        return render_template('home.html', user=user, users=users, owner=owner)
+    return redirect(url_for('login'))
 
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -53,7 +53,6 @@ def login():
                 return redirect(url_for('home'))
             return redirect(url_for('login'))
     return render_template('login.html')
-
 
 
 @app.route('/register', methods=['POST', 'GET'])
@@ -114,19 +113,23 @@ def follow(subscribed_id):
     current_user = get_current_user()
     follow = Subscriptions(owner_id=current_user.id,
                            subscriptions_owner2=subscribed_id)
+    be_followed = Subscriptions(owner_id=subscribed_id,
+                                subscribers_owner2=current_user.id)
     db.session.add(follow)
+    db.session.add(be_followed)
     db.session.commit()
     return redirect(url_for('home'))
 
 
-@app.route('/like/<int:liked_id>')
-def like(liked_id):
+@app.route('/like/<int:post_id>')
+def like(post_id):
     current_user = get_current_user()
     like = Likes(owner_id=current_user.id,
-                 like_owner=liked_id)
-    if like:
-        db.session.delete(Likes.query.filter_by(owner_id=current_user.id,
-                                                like_owner=liked_id).first())
+                 like_owner=post_id)
+    like2 = Likes.query.filter_by(owner_id=current_user.id,
+                                  like_owner=post_id).first()
+    if like2:
+        db.session.delete(like2)
     else:
         db.session.add(like)
     db.session.commit()
@@ -138,7 +141,7 @@ def explore():
     return render_template('explore.html')
 
 
-@app.route('/user',methods=["POST","GET"])
+@app.route('/user', methods=["POST", "GET"])
 def user():
     user = get_current_user()
     posts = Posts.query.filter_by(post_owner=user.id).all()
@@ -150,10 +153,10 @@ def user():
         photo.save(os.path.join("static/img/person", filename))
         file_url = "static/img/person"
         result = file_url+'/'+filename
-        Users.query.filter_by(id=user.id).update({"img":result})
+        Users.query.filter_by(id=user.id).update({"img": result})
         db.session.commit()
-        return redirect(url_for('user',user=user))
-    return render_template('user.html',user=user,posts=posts)
+        return redirect(url_for('user', user=user))
+    return render_template('user.html', user=user, posts=posts)
 
 
 @app.route('/remove_img')
@@ -162,7 +165,7 @@ def remove_img():
     dele_img = Users.query.filter_by(id=user.id).first()
     dele_img.img = None
     db.session.commit()
-    return render_template('user.html',user=user)
+    return render_template('user.html', user=user)
 
 
 @app.route('/logout')
@@ -171,10 +174,10 @@ def logout():
     return redirect(url_for('home'))
 
 
-@app.route('/posts',methods=["POST",'GET'])
+@app.route('/posts', methods=["POST", 'GET'])
 def add_post():
     user = get_current_user()
-    
+
     if request.method == 'POST':
         comment = request.form.get("comment")
         photo = request.files['post']
@@ -182,10 +185,11 @@ def add_post():
         photo.save(os.path.join("static/img/person", filename))
         file_url = "static/img/person"
         result = file_url+'/'+filename
-        add = Posts(post_img=result, post_owner=user.id,post_comment=comment)
+        add = Posts(post_img=result, post_owner=user.id, post_comment=comment)
         db.session.add(add)
         db.session.commit()
-    return redirect(url_for("home"))
+    return redirect(url_for("user"))
+
 
 manager = Manager(app)
 manager.add_command('db', MigrateCommand)
