@@ -1,11 +1,8 @@
+import re
 from flask import Flask, redirect, url_for, render_template
-<<<<<<< HEAD
-from flask import Flask, redirect, url_for, render_template, flash
-=======
 
 from flask import Flask, redirect, url_for, render_template, flash
 
->>>>>>> e672b5e8e9b54b73aa91f8ccacbc6f0862b7a422
 from config import *
 from models import *
 
@@ -15,11 +12,6 @@ from models import *
 from config import *
 
 from werkzeug.utils import secure_filename
-
-<<<<<<< HEAD
-
-=======
->>>>>>> e672b5e8e9b54b73aa91f8ccacbc6f0862b7a422
 app = Flask(__name__)
 db = setup(app)
 
@@ -97,7 +89,7 @@ def register():
             get_user = Users.query.filter_by(username=username).first()
             session['user'] = get_user.username
             return redirect(url_for('login'))
-        return render_template('register.html')
+    return render_template('register.html')
 
 
 @app.route('/subscribe')
@@ -135,6 +127,8 @@ def explore():
 @app.route('/user',methods=["POST","GET"])
 def user():
     user = get_current_user()
+    posts = Posts.query.filter_by(post_owner=user.id).all()
+
     print(user)
     if request.method == "POST":
         photo = request.files['update']
@@ -145,7 +139,7 @@ def user():
         Users.query.filter_by(id=user.id).update({"img":result})
         db.session.commit()
         return redirect(url_for('user',user=user))
-    return render_template('user.html',user=user)
+    return render_template('user.html',user=user,posts=posts)
 
 
 @app.route('/remove_img')
@@ -162,6 +156,22 @@ def logout():
     session.pop('user', None)
     return redirect(url_for('home'))
 
+
+@app.route('/posts',methods=["POST",'GET'])
+def add_post():
+    user = get_current_user()
+    
+    if request.method == 'POST':
+        comment = request.form.get("comment")
+        photo = request.files['post']
+        filename = secure_filename(photo.filename)
+        photo.save(os.path.join("static/img/person", filename))
+        file_url = "static/img/person"
+        result = file_url+'/'+filename
+        add = Posts(post_img=result, post_owner=user.id,post_comment=comment)
+        db.session.add(add)
+        db.session.commit()
+    return redirect(url_for("home"))
 
 manager = Manager(app)
 manager.add_command('db', MigrateCommand)
