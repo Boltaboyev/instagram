@@ -74,7 +74,7 @@ body {
 
 
 .user {
-    padding: 1rem 6rem 0;
+    padding: 2rem 6rem 0;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -306,9 +306,7 @@ body {
 }
 
 .fw_img {
-    background: url('../icon/circle_user_solid.svg');
-    background-position: center;
-    background-repeat: no-repeat;
+    background: url('../icon/circle_user_solid.svg') no-repeat center;
     background-size: cover;
     height: 80px;
     width: 80px;
