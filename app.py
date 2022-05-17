@@ -48,9 +48,10 @@ def login():
             return redirect(url_for('login'))
     return render_template('login.html')
 
-
+print(10)
 @app.route('/register', methods=['POST', 'GET'])
 def register():
+    
     if request.method == 'POST':
         email = request.form.get('email')
         username = request.form.get('username')
