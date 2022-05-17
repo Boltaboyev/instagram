@@ -1,5 +1,11 @@
 from flask import Flask, redirect, url_for, render_template
+<<<<<<< HEAD
 from flask import Flask, redirect, url_for, render_template, flash
+=======
+
+from flask import Flask, redirect, url_for, render_template, flash
+
+>>>>>>> e672b5e8e9b54b73aa91f8ccacbc6f0862b7a422
 from config import *
 from models import *
 
@@ -10,13 +16,23 @@ from config import *
 
 from werkzeug.utils import secure_filename
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> e672b5e8e9b54b73aa91f8ccacbc6f0862b7a422
 app = Flask(__name__)
 db = setup(app)
 
 app.config.from_object('config')
 
 app.config['SECRET_KEY'] = 'dfjkdfohhdfiih'
+
+
+
+def get_user():
+    if "user" in session:
+        username = Users.query.filter_by(name=session['user']).first()
+        return username
 
 
 def get_current_user():
@@ -27,12 +43,10 @@ def get_current_user():
         user_query = user
     return user_query
 
-
-
 @app.route('/')
 def home():
     user = get_current_user()
-    return render_template('home.html',user=user)
+    return render_template('home.html', user=user)
 
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -48,10 +62,10 @@ def login():
             return redirect(url_for('login'))
     return render_template('login.html')
 
-print(10)
+
+
 @app.route('/register', methods=['POST', 'GET'])
 def register():
-    
     if request.method == 'POST':
         email = request.form.get('email')
         username = request.form.get('username')
@@ -61,7 +75,8 @@ def register():
         filename = secure_filename(photo.filename)
         photo.save(os.path.join("static/img/person", filename))
         file_url = "static/img/person"
-        result = file_url+'/'+filename
+
+        result = file_url + '/' + filename
         if len(email) <= 4:
             flash('Email must be greater than 4 characters', category='error')
         elif len(username) <= 2:
@@ -78,16 +93,38 @@ def register():
             db.session.commit()
 
             flash('Account created', category='success')
+
             get_user = Users.query.filter_by(username=username).first()
             session['user'] = get_user.username
-            return redirect(url_for('home'))
-        return redirect(url_for('register'))
-    return render_template('register.html')
+            return redirect(url_for('login'))
+        return render_template('register.html')
 
 
-@app.route('/follow')
-def follow():
-    return render_template('explore.html')
+@app.route('/subscribe')
+def subscriber():
+    current_user = get_current_user()
+    users = Users.query.all()
+    return render_template('follow.html', users=users, current_user=current_user)
+
+
+@app.route('/subscribers/<int:user_id>')
+def subscribers(user_id):
+    current_user = get_current_user()
+    users = Users.query.all()
+    owner = Subscriptions.query.filter_by(owner_id=user_id).all()
+
+    print(owner)
+    return render_template('followers.html', current_user=current_user, users=users, owner=owner)
+
+
+@app.route('/follow/<int:subscribed_id>')
+def follow(subscribed_id):
+    current_user = get_current_user()
+    follow = Subscriptions(owner_id=current_user.id,
+                           subscriptions_owner2=subscribed_id)
+    db.session.add(follow)
+    db.session.commit()
+    return redirect(url_for('home'))
 
 
 @app.route('/explore')

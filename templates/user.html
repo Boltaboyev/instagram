@@ -5,6 +5,7 @@
         <section class="user">
             <div class="user_box">
                 <div class="img">
+<<<<<<< HEAD
 
                 {% if user.img %}
                     <img src="{{user.img}}" alt="">
@@ -13,6 +14,12 @@
                 </div>
                 <div class="user_about">
                     <h3>{{user.username}} </h3>
+=======
+                    <img src="../static/img/person/pic-1.png" alt="">
+                </div>
+                <div class="user_about">
+                    <h3>Web_Developer</h3>
+>>>>>>> e672b5e8e9b54b73aa91f8ccacbc6f0862b7a422
                     <ul class="user_followers">
                         <li>3 posts</li>
                         <li><a href="#">999k followers</a></li>
@@ -30,6 +37,7 @@
                 <label class="upload border_bt" id="change" for="change_file">
                     Upload Photo
                 </label>
+<<<<<<< HEAD
                 <form action="{{ url_for('user') }}" method="post" enctype="multipart/form-data">
                     <input id="change_file" hidden type="file" name="update">
                     <button type="Submit">Submit</button>
@@ -37,6 +45,12 @@
 
                 <div class="remove border_bt">
                     <a href="{{url_for('remove_img')}}">Remove Current Photo</a>
+=======
+                <input id="change_file" hidden type="file">
+
+                <div class="remove border_bt">
+                    <a href="#">Remove Current Photo</a>
+>>>>>>> e672b5e8e9b54b73aa91f8ccacbc6f0862b7a422
                 </div>
                 <div class="cancel border_bt">
                     <p>Cancel</p>
@@ -122,10 +136,18 @@
             <label id="label" for="file">
                 Select from computer
             </label>
+<<<<<<< HEAD
             <form action="{{ url_for('user') }}">/>
                 <input id="file" hidden type="file" name="update">
             </form>
         </div>
 
+=======
+            <input id="file" hidden type="file">
+
+        </div>
+
+
+>>>>>>> e672b5e8e9b54b73aa91f8ccacbc6f0862b7a422
     </section>
 {% endblock %}

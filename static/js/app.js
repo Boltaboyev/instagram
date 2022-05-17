@@ -4,39 +4,41 @@ const plus = document.querySelector('.add_post'),
 
 
 plus.addEventListener('click', () => {
-    add_post.classList.add('display')
+    add_post.classList.add('display');
 });
 
 back.addEventListener('click', () => {
-    add_post.classList.remove('display')
+    add_post.classList.remove('display');
 });
 
 
 const change_btn = document.querySelector('.img'),
     change_photo = document.querySelector('.change_photo'),
     cancel = document.querySelector('.cancel');
-
-change_btn.addEventListener('click', () => {
-
-
-    function change_img() {
+if (change_btn) {
+    change_btn.addEventListener('click', () => {
         change_photo.classList.add('active_flex')
-    }
-
-    setTimeout(change_img, 400)
-})
-
-
-cancel.addEventListener('click', () => {
-    change_photo.classList.remove('active_flex')
-})
+    })
+}
+if (cancel) {
+    cancel.addEventListener('click', () => {
+        change_photo.classList.remove('active_flex');
+    });
+}
 
 
-let file = document.querySelector("#file")
+const heart = document.querySelectorAll('.heart');
 
-file.addEventListener("change", () => {
-    fetch('/user', () => {
-        method: 'POST'
+heart.forEach(ht => {
+    ht.addEventListener('click', () => {
+        if (ht.style.fill === 'red') {
+            ht.style.fill = 'rgb(41, 41, 41)';
+        } else ht.style.fill = 'red';
     })
 })
+
+
+
+
+
 
