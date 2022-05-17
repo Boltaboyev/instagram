@@ -89,20 +89,20 @@ def register():
     return render_template('register.html')
 
 
-@app.route('/subscribe')
+@app.route('/subscribings')
 def subscriber():
     current_user = get_current_user()
     users = Users.query.all()
-    return render_template('follow.html', users=users, current_user=current_user)
+    subscrings = Subscriptions.query.filter_by(owner_id=current_user.id).all()
+    return render_template('follow.html', users=users, current_user=current_user, subscrings=subscrings)
 
 
-@app.route('/subscribers/<int:user_id>')
-def subscribers(user_id):
+@app.route('/subscribers')
+def subscribers():
     current_user = get_current_user()
     users = Users.query.all()
-    owner = Subscriptions.query.filter_by(owner_id=user_id).all()
-
-    print(owner)
+    owner = Subscriptions.query.filter_by(
+        subscriptions_owner2=current_user.id).all()
     return render_template('followers.html', current_user=current_user, users=users, owner=owner)
 
 
@@ -112,6 +112,20 @@ def follow(subscribed_id):
     follow = Subscriptions(owner_id=current_user.id,
                            subscriptions_owner2=subscribed_id)
     db.session.add(follow)
+    db.session.commit()
+    return redirect(url_for('home'))
+
+
+@app.route('/like/<int:liked_id>')
+def like(liked_id):
+    current_user = get_current_user()
+    like = Likes(owner_id=current_user.id,
+                 like_owner=liked_id)
+    if like:
+        db.session.delete(Likes.query.filter_by(owner_id=current_user.id,
+                                                like_owner=liked_id).first())
+    else:
+        db.session.add(like)
     db.session.commit()
     return redirect(url_for('home'))
 

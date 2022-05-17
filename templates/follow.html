@@ -6,25 +6,27 @@
         <div class="container">
             {% if current_user %}
                 {% for user in users %}
-                    {% if user.id!=current_user.id %}           
-                        <div class="follow_box">
-                            
-                                <div class="fw_item">
+                    {% for subscribing in subscrings %}
+                        {%if subscribing.subscriptions_owner2==user.id%}   
+                            <div class="follow_box">
+                                
+                                    <div class="fw_item">
 
-                                    <div class="fw_img">
-                                        <img src="../static/img/person/pic-3.png" alt="">
+                                        <div class="fw_img">
+                                            <img src="{{ user.img }}" alt="">
+                                        </div>
+
+                                        <div class="fw_txt">
+                                            <h2>{{user.username}}</h2>
+                                            <p>You are following</p>
+                                        </div>
+
+                                        <a href="{{url_for('follow', subscribed_id=user.id)}}">#Watch profile</a>
                                     </div>
-
-                                    <div class="fw_txt">
-                                        <h2>{{user.username}}</h2>
-                                        <p>started following you</p>
-                                    </div>
-
-                                    <a href="{{url_for('follow', subscribed_id=user.id)}}">Follow</a>
-                                </div>
-                            
-                        </div>
-                    {% endif %}
+                                
+                            </div>
+                        {%endif%}
+                    {%endfor%}
                 {% endfor %}
             {% endif %}
         </div>
