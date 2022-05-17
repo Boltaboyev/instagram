@@ -639,7 +639,6 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-right: 400px;
 }
 
 .story {
@@ -773,10 +772,11 @@ body {
 }
 
 .suggest {
-    height: 50%;
-    width: 30%;
+    height: 60%;
+    width: 20%;
     background: red;
     position: fixed;
-    right: 150px;
+    right: 225px;
+    padding: 2rem;
 }
 

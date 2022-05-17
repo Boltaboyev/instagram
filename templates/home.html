@@ -6,33 +6,24 @@
     <section class="home">
 
         <div class="new_massage">
-            {#            {% if user %}#}
-            {#                <div class="story">#}
-            {#                    <div class="people">#}
-            {#                        <div class="people_img">#}
-            {#                            <img src="{{ user.img }}" alt="">#}
-            {#                        </div>#}
-            {#                        <p>{{ user.username }}</p>#}
-            {#                    </div>#}
-            {#                    <a href="{{ url_for('subscriber') }}">Subscribe more</a>#}
-            {#                    <a href="{{ url_for('subscribers', user_id=user.id) }}">Subscribers</a>#}
-            {#                </div>#}
-            {#            {% endif %}#}
-            <div class="story">
-                <div class="people">
-                    <div class="people_img">
-                        <img src="../static/img/person/pic-4.png" alt="">
+            {% if user %}
+                <div class="story">
+                    <div class="people">
+                        <div class="people_img">
+                            <img src="{{ user.img }}" alt="">
+                        </div>
+                        <p>{{ user.username }}</p>
                     </div>
-                    <p>kskndfkjwd</p>
+                    <a href="{{ url_for('subscriber') }}">Subscribe more</a>
+                    <a href="{{ url_for('subscribers', user_id=user.id) }}">Subscribers</a>
                 </div>
-                {#                <a href="{{ url_for('subscriber') }}">Subscribe more</a>#}
-                {#                <a href="{{ url_for('subscribers') }}">Subscribers</a>#}
-            </div>
+            {% endif %}
 
             <div class="msg_post">
 
                 <div class="msg_post_box">
                     <div class="owner_name">
+
                         <div class="owner_img">
                             <img src="../static/img/person/pic-3.png" alt="">
                         </div>
@@ -58,15 +49,16 @@
         </div>
 
 
-        <div class="suggest">
-
-        </div>
+{#        <div class="suggest">#}
+{#            <div class="current_user">#}
+{#                <div class="user_picture">#}
+{#                    <img src="../static/img/person/pic-3.png" alt="">#}
+{#                </div>#}
+{#                <h4></h4>#}
+{#            </div>#}
+{#        </div>#}
 
     </section>
-
-
-
-
 
     <section class="new_posts">
         <div class="x_solid">

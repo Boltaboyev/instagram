@@ -13,95 +13,83 @@
 
 <body>
 
-    <section class="login">
-        <div class="wrapper">
-            <!-- <div class="container"> -->
-            <div class="row">
-                <div class="col-md-6 firstContainer">
-                    <img src="../static/img/login/app-feautures.png" alt="[+]" class="rounded d-block w-100">
-                </div>
-                <div class="col-md-6 text-center secondContainer">
-                    <div class="card">
-                        <div class="py-3 px-2">
-                            <img src="../static/img/login/instagram-logo.png" alt="card-img-top">
-                        </div>
-                        <div class="card-body">
-                            <form method="post" action="{{url_for('register')}}" enctype="multipart/form-data">
-                                <div class="form-group py-1">
-                                    <input type="text" class="form-control" name="username" id="" aria-describedby="helpId"
-                                        placeholder="Username">
-                                </div>
-                                <div class="form-group py-1">
-                                    <input type="email" class="form-control" name="email" id="" aria-describedby="helpId"
-                                        placeholder="Email">
-                                </div>
-                                <div class="form-group py-1">
-                                    <input type="password" class="form-control" name="password" id="" aria-describedby="helpId"
-                                        placeholder="Password">
-                                </div>
-                                <div class="form-group py-1">
-                                    <input type="password" class="form-control" name="re-password" id="" aria-describedby="helpId"
-                                        placeholder="Confirm Password">
-                                </div>
-                                <input class="form-control form-control-sm" type="file" aria-label=".form-control-sm example" id="image" name="image_user">
-                                <input type="submit" value="Sign Up" class="mt-2 btn btn-primary w-100 disabled">
-                            </form>
-                            <div class="or">
-                                <span>OR</span>
-                            </div>
-                            <div class="otherMethods">
-                                <div class="secondaryColor">
-                                    <img src="../static/img/login/facebook-logo.png" class="img-fluid rounded" alt="[+]"
-                                        style="width: 18px;height: 18px">
-                                    <span class="ms-2">Login with Facebook</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {% for msg in get_flashed_messages() %}
-                        <p>{{ msg }}</p>
-                    {% endfor %}
-
-
-                    <form method="post" action="{{ url_for('register') }}">
-                        <div class="card-body">
-
-                            <span>Already Have an Account?</span><a class="lk" href="../templates/login.html"><span class="primaryColor">Login</span></a>
-                        </div>
-
-                    </form>
-
-                    <div class="or">
-                        <span>OR</span>
-                    </div>
-                    <div class="otherMethods">
-                        <div class="secondaryColor">
-                            <img src="../static/img/login/facebook-logo.png" class="img-fluid rounded" alt="[+]"
-                                 style="width: 18px;height: 18px">
-                            <span class="ms-2">Login with Facebook</span>
-                        </div>
-                    </div>
-                </div>
+<section class="login">
+    <div class="wrapper">
+        <!-- <div class="container"> -->
+        <div class="row">
+            <div class="col-md-6 firstContainer">
+                <img src="../static/img/login/app-feautures.png" alt="[+]" class="rounded d-block w-100">
             </div>
-            <div class="card my-2">
-                <div class="card-body">
-                    <span>Don't Have an Account?</span><a class="lk" href="../templates/login.html"><span
-                        class="primaryColor">Login</span></a>
+            <div class="col-md-6 text-center secondContainer">
+                <div class="card">
+                    <div class="py-3 px-2">
+                        <img src="../static/img/login/instagram-logo.png" alt="card-img-top">
+                    </div>
+                    <div class="card-body">
+                        <form method="post" action="{{ url_for('register') }}" enctype="multipart/form-data">
+                            <div class="form-group py-1">
+                                <input type="text" class="form-control" name="username" id="" aria-describedby="helpId"
+                                       placeholder="Username">
+                            </div>
+                            <div class="form-group py-1">
+                                <input type="email" class="form-control" name="email" id="" aria-describedby="helpId"
+                                       placeholder="Email">
+                            </div>
+                            <div class="form-group py-1">
+                                <input type="password" class="form-control" name="password" id=""
+                                       aria-describedby="helpId"
+                                       placeholder="Password">
+                            </div>
+                            <div class="form-group py-1">
+                                <input type="password" class="form-control" name="re-password" id=""
+                                       aria-describedby="helpId"
+                                       placeholder="Confirm Password">
+                            </div>
+                            <input class="form-control form-control-sm" type="file"
+                                   aria-label=".form-control-sm example" id="image" name="image_user">
+                            <input type="submit" value="Sign Up" class="mt-2 btn btn-primary w-100">
+                        </form>
+
+                        {% for msg in get_flashed_messages() %}
+                            <p>{{ msg }}</p>
+                        {% endfor %}
+
+
+                        <form method="post" action="{{ url_for('register') }}">
+                            <div class="card-body">
+
+                                <span>Already Have an Account?</span><a class="lk" href="{{ url_for('login') }}"><span
+                                    class="primaryColor">Login</span></a>
+                            </div>
+
+                        </form>
+
+                        <div class="or">
+                            <span>OR</span>
+                        </div>
+                        <div class="otherMethods">
+                            <div class="secondaryColor">
+                                <img src="../static/img/login/facebook-logo.png" class="img-fluid rounded" alt="[+]"
+                                     style="width: 18px;height: 18px">
+                                <span class="ms-2">Login with Facebook</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <span class="primaryColor">Get the App</span>
-            <div class="row py-2">
-                <div class="col-6"><img src="../static/img/login/playstore.png" alt="[+]"
-                                        class="img-fluid d-block rounded"/>
-                </div>
-                <div class="col-6"><img src="../static/img/login/appstore.png" alt="[+]"
-                                        class="img-fluid d-block rounded"/>
+
+                <span class="primaryColor">Get the App</span>
+                <div class="row py-2">
+                    <div class="col-6"><img src="../static/img/login/playstore.png" alt="[+]"
+                                            class="img-fluid d-block rounded"/>
+                    </div>
+                    <div class="col-6"><img src="../static/img/login/appstore.png" alt="[+]"
+                                            class="img-fluid d-block rounded"/>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- </div> -->
+
+
     </div>
 </section>
 
