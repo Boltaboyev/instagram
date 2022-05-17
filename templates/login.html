@@ -13,38 +13,35 @@
 
 <body>
 
-    <section class="login">
-        <div class="wrapper">
-            <!-- <div class="container"> -->
-            <div class="row">
-                <div class="col-md-6 firstContainer">
-                    <img src="../static/img/login/app-feautures.png" alt="[+]" class="rounded d-block w-100">
-                </div>
-                <div class="col-md-6 text-center secondContainer">
-                    <div class="card">
-                        <div class="py-3 px-2">
-                            <img src="../static/img/login/instagram-logo.png" alt="card-img-top">
-                        </div>
-                        <div class="card-body">
-                            <form method="post" action="{{url_for('login')}}">
+<section class="login">
+    <div class="wrapper">
+        <!-- <div class="container"> -->
+        <div class="row">
+            <div class="col-md-6 firstContainer">
+                <img src="../static/img/login/app-feautures.png" alt="[+]" class="rounded d-block w-100">
+            </div>
+            <div class="col-md-6 text-center secondContainer">
+                <div class="card">
+                    <div class="py-3 px-2">
+                        <img src="../static/img/login/instagram-logo.png" alt="card-img-top">
+                    </div>
+                    <div class="card-body">
+                        <form method="post" action="{{ url_for('login') }}">
 
-                                <div class="form-group py-1">
-                                    <input type="text" class="form-control" name="username" id="" aria-describedby="helpId"
-                                        placeholder="Username">
-                                </div>
-                                <div class="form-group py-1">
-                                    <input type="password" class="form-control" name="password" id="" aria-describedby="helpId"
-                                        placeholder="Password">
-                                </div>
-                                <input type="submit" value="Log In" class="mt-2 btn btn-primary w-100 ">
+                            <div class="form-group py-1">
+                                <input type="text" class="form-control" name="username" id="" aria-describedby="helpId"
+                                       placeholder="Username">
+                            </div>
+                            <div class="form-group py-1">
+                                <input type="password" class="form-control" name="password" id=""
+                                       aria-describedby="helpId"
+                                       placeholder="Password">
+                            </div>
+                            <input type="submit" value="Log In" class="mt-2 btn btn-primary w-100 ">
 
-                            </form>
-                            <div class="or">
-                                <span>OR</span>
-
-                        
-
-                           
+                        </form>
+                        <div class="or">
+                            <span>OR</span>
                         </div>
                         <div class="otherMethods">
                             <div class="secondaryColor">
@@ -59,18 +56,13 @@
                     </div>
                     <div class="card my-2">
                         <div class="card-body">
-                            <span> Don't have an account </span><a class="lk" href="../templates/register.html"><span
-                                    class="primaryColor">Sign Up</span></a>
+                            <span> Don't have an account </span><a class="lk" href="{{ url_for('register') }}"><span
+                                class="primaryColor">Sign Up</span></a>
 
                         </div>
                     </div>
                 </div>
-                <div class="card my-2">
-                    <div class="card-body">
-                        <span> Have an account </span><a class="lk" href="../templates/register.html"><span
-                            class="primaryColor">Sign Up</span></a>
-                    </div>
-                </div>
+
                 <span class="primaryColor cursor">Get the App</span>
                 <div class="row py-2">
                     <div class="col-6"><a

@@ -34,10 +34,34 @@ heart.forEach(ht => {
         if (ht.style.fill === 'red') {
             ht.style.fill = 'rgb(41, 41, 41)';
         } else ht.style.fill = 'red';
-    })
-})
+    });
+});
 
 
+const post_next = document.querySelector('.post_next'),
+    post_content = document.querySelector('.post_ct'),
+    label = document.querySelector('#label'),
+    x = document.querySelector('.x_bold');
+
+if (post_next) {
+    post_next.addEventListener('click', () => {
+        post_content.classList.add('display');
+    });
+
+    post_next.addEventListener('click', () => {
+        add_post.style.display = 'none';
+    });
+}
+
+x.addEventListener('click', () => {
+    post_content.classList.remove('display');
+});
+
+if (label) {
+    label.addEventListener('click', () => {
+        post_next.style.display = 'flex'
+    });
+}
 
 
 
