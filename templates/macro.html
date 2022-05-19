@@ -1,4 +1,4 @@
-{% macro links(user) %}
+{% macro links(current_user) %}
 
 
     <header class="header">
@@ -27,7 +27,7 @@
             <li><a href="{{ url_for('user') }}"><img src="../static/icon/circle_user_solid.svg" alt=""
                                                      height="25px"></a></li>
 
-            {% if user %}
+            {% if current_user %}
                 <li><a href="{{ url_for('logout') }}">Logout</a></li>
             {% else %}
                 <li><a href="{{ url_for('register') }}">Register</a></li>

@@ -12,7 +12,7 @@
                         <div class="people_img">
                             <img src="{{ user.img }}" alt="">
                         </div>
-                        <p>{{ user.username }}</p>
+                        <p>{{ current_user.username }}</p>
                     </div>
                     <a href="{{ url_for('subscriber') }}">Your friends</a>
                     <a href="{{ url_for('subscribers', user_id=user.id) }}">Subscribers</a>
@@ -33,7 +33,7 @@
                                         <div class="owner_name">
 
                                             <div class="owner_img">
-                                                <img src="{{user.img}}" alt="">
+                                                <img src="{{current_user.img}}" alt="">
                                             </div>
                                             <p>{{user.username}}</p>
                                         </div>

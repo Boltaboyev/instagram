@@ -6,17 +6,17 @@
             <div class="user_box">
                 <div class="img">
 
-                    {% if  user.img %}
-                        <img src="{{user.img}}" alt="">
+                    {% if  current_user.img %}
+                        <img src="{{current_user.img}}" alt="">
                     {% endif %}
 
                 </div>
                 <div class="user_about">
-                    <h3>{{ user.username}}</h3>
+                    <h3>{{ current_user.username}}</h3>
                     <ul class="user_followers">
-                        <li>{{user.posts|length}} posts</li>
-                        <li><a href="{{url_for('subscribers')}}">{{user.subscriptions|length}} followers</a></li>
-                        <li><a href="{{url_for('subscriber')}}">{{user.subscribers|length}} following</a></li>
+                        <li>{{current_user.posts|length}} posts</li>
+                        <li><a href="{{url_for('subscribers')}}">{{current_user.subscriptions|length}} followers</a></li>
+                        <li><a href="{{url_for('subscriber')}}">{{current_user.subscribers|length}} following</a></li>
                     </ul>
                 </div>
             </div>
@@ -45,7 +45,7 @@
             </div>
         </section>
     </div>
-        <a href="{{url_for('hide_acaunt')}}"> {% if user.post_type %} open account {% else%} close acaunt {% endif %}</a>
+        <a href="{{url_for('hide_acaunt')}}"> {% if current_user.post_type %} open account {% else%} close acaunt {% endif %}</a>
         
         
 
