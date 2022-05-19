@@ -769,6 +769,7 @@ body {
 .owner_post_like p {
     color: #222;
     font-family: system-ui;
+
 }
 
 .suggest {
@@ -779,4 +780,3 @@ body {
     right: 225px;
     padding: 2rem;
 }
-

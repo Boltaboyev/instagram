@@ -20,7 +20,9 @@ class Users(db.Model):
     password = db.Column(db.String())
     img = db.Column(db.String(), nullable=True)
     subscriptions = db.relationship(
-        'Subscriptions', backref='subscriptions_owner')
+        'Subscriptions', backref='subscriptions_owner', foreign_keys='Subscriptions.subscriptions_owner2')
+    subscribers = db.relationship(
+        'Subscriptions', backref='subscribers_owner', foreign_keys='Subscriptions.subscribers_owner2')
     posts = db.relationship("Posts", backref="posts_owner")
     post_type = db.Column(db.Boolean())
 
@@ -47,3 +49,4 @@ class Subscriptions(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     owner_id = db.Column(db.Integer)
     subscriptions_owner2 = db.Column(db.Integer, db.ForeignKey('users.id'))
+    subscribers_owner2 = db.Column(db.Integer, db.ForeignKey('users.id'))

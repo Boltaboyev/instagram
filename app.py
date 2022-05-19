@@ -24,12 +24,6 @@ app.config.from_object('config')
 app.config['SECRET_KEY'] = 'dfjkdfohhdfiih'
 
 
-def get_user():
-    if "user" in session:
-        username = Users.query.filter_by(name=session['user']).first()
-        return username
-
-
 def get_current_user():
     user_query = None
     if 'user' in session:
@@ -42,7 +36,13 @@ def get_current_user():
 @app.route('/')
 def home():
     user = get_current_user()
-    return render_template('home.html', user=user)
+    if user:
+        users = Users.query.all()
+        owner = Subscriptions.query.filter_by(
+            subscriptions_owner2=user.id).all()
+
+        return render_template('home.html', user=user, users=users, owner=owner)
+    return redirect(url_for('login'))
 
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -95,20 +95,20 @@ def register():
     return render_template('register.html')
 
 
-@app.route('/subscribe')
+@app.route('/subscribings')
 def subscriber():
     current_user = get_current_user()
     users = Users.query.all()
-    return render_template('follow.html', users=users, current_user=current_user)
+    subscrings = Subscriptions.query.filter_by(owner_id=current_user.id).all()
+    return render_template('follow.html', users=users, current_user=current_user, subscrings=subscrings)
 
 
-@app.route('/subscribers/<int:user_id>')
-def subscribers(user_id):
+@app.route('/subscribers')
+def subscribers():
     current_user = get_current_user()
     users = Users.query.all()
-    owner = Subscriptions.query.filter_by(owner_id=user_id).all()
-
-    print(owner)
+    owner = Subscriptions.query.filter_by(
+        subscriptions_owner2=current_user.id).all()
     return render_template('followers.html', current_user=current_user, users=users, owner=owner)
 
 
@@ -117,7 +117,25 @@ def follow(subscribed_id):
     current_user = get_current_user()
     follow = Subscriptions(owner_id=current_user.id,
                            subscriptions_owner2=subscribed_id)
+    be_followed = Subscriptions(owner_id=subscribed_id,
+                                subscribers_owner2=current_user.id)
     db.session.add(follow)
+    db.session.add(be_followed)
+    db.session.commit()
+    return redirect(url_for('home'))
+
+
+@app.route('/like/<int:post_id>')
+def like(post_id):
+    current_user = get_current_user()
+    like = Likes(owner_id=current_user.id,
+                 like_owner=post_id)
+    like2 = Likes.query.filter_by(owner_id=current_user.id,
+                                  like_owner=post_id).first()
+    if like2:
+        db.session.delete(like2)
+    else:
+        db.session.add(like)
     db.session.commit()
     return redirect(url_for('home'))
 
@@ -144,7 +162,7 @@ def user():
         photo.save(os.path.join("static/img/person", filename))
         file_url = "static/img/person"
         result = file_url+'/'+filename
-        Users.query.filter_by(id=user.id).update({"img":result})
+        Users.query.filter_by(id=user.id).update({"img": result})
         db.session.commit()
         return redirect(url_for('user', user=user))
     return render_template('user.html', user=user, posts=posts)
@@ -156,7 +174,8 @@ def remove_img():
     dele_img = Users.query.filter_by(id=user.id).first()
     dele_img.img = ""
     db.session.commit()
-    return redirect(url_for("user"),user=user)
+
+    return redirect(url_for("user"), user=user)
 
 
 @app.route('/logout')
@@ -175,11 +194,13 @@ def add_post():
         filename = secure_filename(photo.filename)
         photo.save(os.path.join("static/img/person", filename))
         file_url = "static/img/person"
+
         result = file_url + '/' + filename
+
         add = Posts(post_img=result, post_owner=user.id, post_comment=comment)
         db.session.add(add)
         db.session.commit()
-    return redirect(url_for("home"))
+    return redirect(url_for("user"))
 
 
 @app.route('/hide')
@@ -193,6 +214,7 @@ def hide_acaunt():
          get_user.post_type = True
          db.session.commit()
     return redirect(url_for('user'))
+
 
 
 manager = Manager(app)
