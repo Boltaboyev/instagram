@@ -637,6 +637,8 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    position: relative;
+    right: 190px;
 }
 
 .story {
@@ -767,14 +769,115 @@ body {
 .owner_post_like p {
     color: #222;
     font-family: system-ui;
+
 }
 
 .suggest {
-    height: 60%;
-    width: 20%;
-    background: red;
+    height: 70%;
+    width: 25%;
     position: fixed;
-    right: 225px;
-    padding: 2rem;
+    right: 200px;
+    border: 1px solid rgb(219, 219, 219);
+    border-radius: 3px;
 }
 
+.current_user {
+    width: 91%;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    padding: 15px;
+}
+
+.current_user h4 {
+    color: #000;
+    font-family: system-ui;
+}
+
+.user_picture {
+    height: 60px;
+    width: 60px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 25px 0 0;
+}
+
+.user_picture img {
+    height: 60px;
+    width: 60px;
+    border-radius: 50%;
+}
+
+.suggest_ct {
+    height: 20px;
+    padding: 0 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.suggest_ct h4 {
+    color: #8e8e8e;
+    font-family: system-ui;
+}
+
+.suggest_line {
+    height: 1px;
+    width: 100%;
+    background: rgba(217, 217, 217, 0.86);
+    margin-top: 20px;
+    margin-bottom: 3px;
+}
+
+.other_users {
+    height: 315px;
+    padding: 0 1rem;
+    overflow: auto;
+}
+
+.item {
+    width: 100%;
+    height: 55px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin: 0 0 10px;
+}
+
+.item img {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    margin: 0 20px 0 0;
+}
+
+.user_nick {
+    color: #111;
+    font-family: system-ui;
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.new_to {
+    font-family: system-ui;
+    color: #999;
+    font-size: 14px;
+}
+
+.follow_btn {
+    position: absolute;
+    right: 10px;
+}
+
+.fw_btn {
+    border: none;
+    outline: none;
+    background: #fff;
+    cursor: pointer;
+    color: #0095f6;
+    font-size: 15px;
+}

@@ -64,5 +64,20 @@ if (label) {
 }
 
 
+const follow_btn = document.querySelectorAll('.fw_btn');
+
+
+follow_btn.forEach(i => {
+    i.addEventListener('click', () => {
+        if (i.value === 'Follow' || i.style.color === '#0095f6') {
+            i.value = 'Following';
+            i.style.color = '#999';
+        } else {
+            i.value = 'Follow'
+            i.style.color = '#0095f6';
+        }
+
+    })
+})
 
 
