@@ -35,13 +35,13 @@ def get_current_user():
 
 @app.route('/')
 def home():
-    current_user = get_current_user()
-    if current_user:
+    user = get_current_user()
+    if user:
         users = Users.query.all()
         owner = Subscriptions.query.filter_by(
-            subscriptions_owner2=current_user.id).all()
+            subscriptions_owner2=user.id).all()
 
-        return render_template('home.html', current_user=current_user, users=users, owner=owner)
+        return render_template('home.html', user=user, users=users, owner=owner)
     return redirect(url_for('login'))
 
 
@@ -122,7 +122,7 @@ def follow(subscribed_id):
     db.session.add(follow)
     db.session.add(be_followed)
     db.session.commit()
-    return redirect(url_for('home', user=user))
+    return redirect(url_for('home'))
 
 
 @app.route('/like/<int:post_id>')
@@ -147,11 +147,13 @@ def explore():
 
 @app.route('/user', methods=["POST", "GET"])
 def user():
-    current_user = get_current_user()
-    posts = Posts.query.filter_by(post_owner=current_user.id).all()
+    user = get_current_user()
+    posts = Posts.query.filter_by(post_owner=user.id).all()
+
+    print(user)
     if request.method == "POST":
         photo = request.files['update']
-        get_userId = Users.query.filter_by(id=current_user.id).first()
+        get_userId = Users.query.filter_by(id=user.id).first()
 
         if os.path.exists(get_userId.img):
             os.remove(get_userId.img)
@@ -159,21 +161,21 @@ def user():
         filename = secure_filename(photo.filename)
         photo.save(os.path.join("static/img/person", filename))
         file_url = "static/img/person"
-        result = file_url + '/' + filename
-        Users.query.filter_by(id=current_user.id).update({"img": result})
+        result = file_url+'/'+filename
+        Users.query.filter_by(id=user.id).update({"img": result})
         db.session.commit()
-        return redirect(url_for('user', current_user=current_user))
-    return render_template('user.html', current_user=current_user, posts=posts)
+        return redirect(url_for('user', user=user))
+    return render_template('user.html', user=user, posts=posts)
 
 
 @app.route('/remove_img')
 def remove_img():
-    current_user = get_current_user()
-    dele_img = Users.query.filter_by(id=current_user.id).first()
+    user = get_current_user()
+    dele_img = Users.query.filter_by(id=user.id).first()
     dele_img.img = ""
     db.session.commit()
 
-    return redirect(url_for("user", current_user=current_user))
+    return redirect(url_for("user"), user=user)
 
 
 @app.route('/logout')
@@ -184,7 +186,7 @@ def logout():
 
 @app.route('/posts', methods=["POST", 'GET'])
 def add_post():
-    current_user = get_current_user()
+    user = get_current_user()
 
     if request.method == 'POST':
         comment = request.form.get("comment")
@@ -195,7 +197,7 @@ def add_post():
 
         result = file_url + '/' + filename
 
-        add = Posts(post_img=result, post_owner=current_user.id, post_comment=comment)
+        add = Posts(post_img=result, post_owner=user.id, post_comment=comment)
         db.session.add(add)
         db.session.commit()
     return redirect(url_for("user"))
@@ -212,6 +214,7 @@ def hide_acaunt():
         get_user.post_type = True
         db.session.commit()
     return redirect(url_for('user'))
+
 
 
 manager = Manager(app)

@@ -14,7 +14,7 @@
 <body>
 
 <!-- HEADER -->
-{{ links(current_user) }}
+{{ links(user) }}
 {% for msg in get_flashed_messages() %}
     <p>{{ msg }}</p>
 {% endfor %}
@@ -46,31 +46,30 @@
                 Select from computer
             </label>
             <input hidden id="file" type="file" name="post">
-        </form>
     </div>
-
 
 </section>
 
 <section class="post_ct">
-    <form action="{{ url_for('add_post') }}" method="post" enctype="multipart/form-data">
-        <div class="x_solid x_bold">
-            <img class="back" src="../static/icon/times-solid.svg" alt="">
-        </div>
-        <div class="post_content">
-            <h3>Write a caption</h3>
-            <a href="#">Share</a>
-            <div class="line"></div>
 
-            <div class="user_circle">
-                <img src=" {{ current_user.img }}" alt="">
-            </div>
-            <p> {{ current_user.username }} </p>
+    <div class="x_solid x_bold">
+        <img class="back" src="../static/icon/times-solid.svg" alt="">
+    </div>
+    <div class="post_content">
+        <h3>Write a caption</h3>
+        <a href="#">Share</a>
+        <div class="line"></div>
+
+        <div class="user_circle">
+            <img src="../static/img/person/pic-1.png" alt="">
+        </div>
+        <p>John Doe</p>
             <div class="post_input">
                 <input type="text" placeholder="Write a caption..." name="comment">
             </div>
-        </div>
-    </form>
+        </form>
+        
+    </div>
 </section>
 
 
