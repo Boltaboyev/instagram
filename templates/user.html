@@ -43,6 +43,9 @@
             </div>
         </section>
     </div>
+        <a href="{{url_for('hide_acaunt')}}"> {% if user.post_type %} open account {% else%} close acaunt {% endif %}</a>
+        
+        
 
     <div class="container">
         <section class="post">
@@ -64,7 +67,6 @@
                         </svg>
                     </div>
                         <img class="posts" src="{{ post.post_img}}" alt="">
-                        <a href="{{url_for('heade_post',get_id=post.id)}}">Headen Post</a>
                 </div>
         {% endfor %}
 

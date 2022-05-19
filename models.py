@@ -22,6 +22,8 @@ class Users(db.Model):
     subscriptions = db.relationship(
         'Subscriptions', backref='subscriptions_owner')
     posts = db.relationship("Posts", backref="posts_owner")
+    post_type = db.Column(db.Boolean())
+
 
 
 class Posts(db.Model):
@@ -31,7 +33,6 @@ class Posts(db.Model):
     post_comment = db.Column(db.String())
     post_owner = db.Column(db.Integer, db.ForeignKey('users.id'))
     post_like = db.relationship("Likes", backref="likes_owner")
-    post_head = db.Column(db.Boolean())
 
 
 class Likes(db.Model):

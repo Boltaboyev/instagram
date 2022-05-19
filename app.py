@@ -182,20 +182,17 @@ def add_post():
     return redirect(url_for("home"))
 
 
-@app.route('/heade_post/<int:get_id>')
-def heade_post(get_id):
-    user= get_current_user()
-    post = Posts.query.filter_by(id=get_id).first()
-    print(post)
-    if post.post_head:
-        post.post_head = False
-        db.session.commit()
-        return redirect(url_for('user',user=user))
-
+@app.route('/hide')
+def hide_acaunt():
+    user = get_current_user()
+    get_user = Users.query.filter_by(id=user.id).first()
+    if get_user.post_type:
+         get_user.post_type = False
+         db.session.commit()
     else:
-        post.post_head = True
-        db.session.commit()
-        return redirect(url_for('user',user=user))
+         get_user.post_type = True
+         db.session.commit()
+    return redirect(url_for('user'))
 
 
 manager = Manager(app)
