@@ -5,7 +5,9 @@
         <section class="user">
             <div class="user_box">
                 <div class="img">
-                    <img src="../static/icon/circle_user_solid.svg" alt="">
+                    {% if  user.img %}
+                        <img src="{{ user.img }}" alt="">
+                    {% endif %}
                 </div>
                 <div class="user_about">
                     <h3>{{ user.username }}</h3>
@@ -35,6 +37,7 @@
                     <a href="{{ url_for('remove_img') }}">Remove Current Photo</a>
                     <input id="change_file" hidden type="file">
 
+
                     <div class="cancel border_bt">
                         <p>Cancel</p>
                     </div>
@@ -47,6 +50,7 @@
             {% for post in posts %}
 
                 <div class="post_img">
+
 
                 <div class="img_hover">
                     <div class="like">
@@ -64,6 +68,7 @@
                     <img class="posts" src="{{ post.post_img }}" alt="">
                 </div>
             {% endfor %}
+
 
         </section>
     </div>
