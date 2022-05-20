@@ -1,0 +1,5 @@
+{% for user in users %}
+    {%if user.id != current_user.id %}
+        <a href="{{url_for('view_user', user_id=user.id)}}">{{user.username}}</a>
+    {%endif%}
+{% endfor %}

@@ -18,7 +18,7 @@
 {% for msg in get_flashed_messages() %}
     <p>{{ msg }}</p>
 {% endfor %}
-
+<form action="{{ url_for('add_post') }}" method="post" enctype="multipart/form-data">
 <section class="new_posts">
     <div class="x_solid">
         <img class="back" src="../static/icon/times-solid.svg" alt="">
@@ -41,7 +41,7 @@
                     fill="currentColor"></path>
         </svg>
         <h4>Drag photos and videos here</h4>
-        <form action="{{ url_for('add_post') }}" method="post" enctype="multipart/form-data">
+        
             <label id="label" for="file">
                 Select from computer
             </label>
@@ -57,7 +57,7 @@
     </div>
     <div class="post_content">
         <h3>Write a caption</h3>
-        <a href="#">Share</a>
+        <input type="submit" value="Share">
         <div class="line"></div>
 
         <div class="user_circle">
@@ -67,11 +67,11 @@
             <div class="post_input">
                 <input type="text" placeholder="Write a caption..." name="comment">
             </div>
-        </form>
+        
         
     </div>
 </section>
-
+</form>
 
 {% block section %}
 

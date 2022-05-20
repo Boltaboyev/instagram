@@ -7,43 +7,48 @@
                 <div class="img">
 
                     {% if  user.img %}
-                        <img src="{{user.img}}" alt="">
+                        <img src="/{{user.img}}" alt="">
                     {% endif %}
 
                 </div>
                 <div class="user_about">
                     <h3>{{ user.username}}</h3>
+                    {% if not subs and current_user.id!=user.id %}
+                        <a href="{{url_for('follow', subscribed_id=user.id)}}">Follow</a>
+                    {% endif %}
                     <ul class="user_followers">
                         <li>{{user.posts|length}} posts</li>
-                        <li><a href="{{url_for('subscribers')}}">{{user.subscriptions|length}} followers</a></li>
-                        <li><a href="{{url_for('subscriber')}}">{{user.subscribers|length}} following</a></li>
+                        <li><a href="{{url_for('subscribers', user_id=user.id)}}">{{user.subscriptions|length}} followers</a></li>
+                        <li><a href="{{url_for('subscriber', user_id=user.id)}}">{{user.subscribers|length}} following</a></li>
                     </ul>
                 </div>
             </div>
         </section>  
-        <section class="change_photo">
-            <div class="change_box">
-                <div class="change_box_text border_bt">
-                    <h4>Change Profile Photo</h4>
+        {%if user.id == current_user.id%}
+            <section class="change_photo">
+                <div class="change_box">
+                    <div class="change_box_text border_bt">
+                        <h4>Change Profile Photo</h4>
+                    </div>
+
+                    <label class="upload border_bt" id="change" for="change_file">
+                        Upload Photo
+                    </label>
+                    <form action="{{ url_for('user') }}" method="post" enctype="multipart/form-data">
+                        <input id="change_file" hidden type="file" name="update">
+                        <button type="Submit">Submit</button>
+                    </form>
+
+                    <div class="remove border_bt">
+                        <a href="{{url_for('remove_img')}}">Remove Current Photo</a>
+                    <input id="change_file" hidden type="file">
+
+                    <div class="cancel border_bt">
+                        <p>Cancel</p>
+                    </div>
                 </div>
-
-                <label class="upload border_bt" id="change" for="change_file">
-                    Upload Photo
-                </label>
-                <form action="{{ url_for('user') }}" method="post" enctype="multipart/form-data">
-                    <input id="change_file" hidden type="file" name="update">
-                    <button type="Submit">Submit</button>
-                </form>
-
-                <div class="remove border_bt">
-                    <a href="{{url_for('remove_img')}}">Remove Current Photo</a>
-                <input id="change_file" hidden type="file">
-
-                <div class="cancel border_bt">
-                    <p>Cancel</p>
-                </div>
-            </div>
-        </section>
+            </section>
+        {%endif%}
     </div>
 
     <div class="container">
@@ -68,8 +73,8 @@
                         </svg>
                     </div>
 
-                        <img class="posts" src="{{ post.post_img}}" alt="">
-                        <a href="{{url_for('heade_post',get_id=post.id)}}">Headen Post</a>
+                        <img class="posts" src="/{{ post.post_img}}" alt="">
+                        {# <a href="{{url_for('heade_post',get_id=post.id)}}">Hide Post</a> #}
                 </div>
         {% endfor %}
 

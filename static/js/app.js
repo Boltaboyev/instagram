@@ -33,7 +33,27 @@ heart.forEach(ht => {
     ht.addEventListener('click', () => {
         if (ht.style.fill === 'red') {
             ht.style.fill = 'rgb(41, 41, 41)';
-        } else ht.style.fill = 'red';
+            console.log(ht.dataset.id)
+            fetch('/like/' + ht.dataset.id, {
+                
+                method: "POST",
+                body: JSON.stringify({
+                    "liked": true
+                }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+        } else {ht.style.fill = 'red';
+            fetch('/like/' + ht.dataset.id, {
+                method: "POST",
+                body: JSON.stringify({
+                    "liked": false
+                }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })};
     });
 });
 

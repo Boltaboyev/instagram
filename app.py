@@ -95,21 +95,23 @@ def register():
     return render_template('register.html')
 
 
-@app.route('/subscribings')
-def subscriber():
+@app.route('/subscribings/<int:user_id>')
+def subscriber(user_id):
     current_user = get_current_user()
+    user1 = Users.query.filter_by(id=user_id).first()
     users = Users.query.all()
-    subscrings = Subscriptions.query.filter_by(owner_id=current_user.id).all()
-    return render_template('follow.html', users=users, current_user=current_user, subscrings=subscrings)
+    subscrings = Subscriptions.query.filter_by(owner_id=user1.id).all()
+    return render_template('follow.html', users=users, current_user=current_user, subscrings=subscrings, user1=user1)
 
 
-@app.route('/subscribers')
-def subscribers():
+@app.route('/subscribers/<int:user_id>')
+def subscribers(user_id):
     current_user = get_current_user()
+    user1 = Users.query.filter_by(id=user_id).first()
     users = Users.query.all()
     owner = Subscriptions.query.filter_by(
-        subscriptions_owner2=current_user.id).all()
-    return render_template('followers.html', current_user=current_user, users=users, owner=owner)
+        subscriptions_owner2=user1.id).all()
+    return render_template('followers.html', current_user=current_user, users=users, owner=owner, user1=user1)
 
 
 @app.route('/follow/<int:subscribed_id>')
@@ -132,12 +134,14 @@ def like(post_id):
                  like_owner=post_id)
     like2 = Likes.query.filter_by(owner_id=current_user.id,
                                   like_owner=post_id).first()
-    if like2:
+    complete = request.get_json()['liked']
+    print(complete)
+    if complete:
         db.session.delete(like2)
     else:
         db.session.add(like)
     db.session.commit()
-    return redirect(url_for('home'))
+    return True
 
 
 @app.route('/explore')
@@ -147,10 +151,9 @@ def explore():
 
 @app.route('/user', methods=["POST", "GET"])
 def user():
-    user = get_current_user()
-    posts = Posts.query.filter_by(post_owner=user.id).all()
-
-    print(user)
+    current_user = get_current_user()
+    posts = Posts.query.filter_by(post_owner=current_user.id).all()
+    user = Users.query.filter_by(id=current_user.id).first()
     if request.method == "POST":
         photo = request.files['update']
         get_userId = Users.query.filter_by(id=user.id).first()
@@ -165,7 +168,25 @@ def user():
         Users.query.filter_by(id=user.id).update({"img": result})
         db.session.commit()
         return redirect(url_for('user', user=user))
-    return render_template('user.html', user=user, posts=posts)
+    return render_template('user.html', user=user, posts=posts, current_user=current_user)
+
+
+
+@app.route('/view_user/<int:user_id>', methods=["POST", "GET"])
+def view_user(user_id):
+    user = Users.query.filter_by(id=user_id).first()
+    current_user = get_current_user()
+    posts = Posts.query.filter_by(post_owner=user.id).all()
+    subs = Subscriptions.query.filter_by(owner_id=current_user.id, subscriptions_owner2=user.id).first()
+    return render_template('user.html', user=user, posts=posts, current_user=current_user, subs=subs)
+
+
+
+@app.route('/suggested_users')
+def suggested_users():
+    users = Users.query.all()
+    current_user = get_current_user()
+    return render_template('suggested_users.html', users=users, current_user=current_user)
 
 
 @app.route('/remove_img')
