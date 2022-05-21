@@ -32,23 +32,28 @@ const heart = document.querySelectorAll('.heart');
 heart.forEach(ht => {
     ht.addEventListener('click', () => {
         if (ht.style.fill === 'red') {
-            ht.style.fill = 'rgb(41, 41, 41)';
+            ht.style.fill = 'rgb(41, 41, 41)'
             console.log(ht.dataset.id)
             fetch('/like/' + ht.dataset.id, {
                 
                 method: "POST",
                 body: JSON.stringify({
-                    "liked": true
+                    "liked": 'true'
                 }),
                 headers: {
                     'Content-Type': 'application/json'
                 }
             })
-        } else {ht.style.fill = 'red';
+            .then(function (response) {
+                return response.json()
+
+            })
+
+        } else {ht.style.fill = 'red'
             fetch('/like/' + ht.dataset.id, {
                 method: "POST",
                 body: JSON.stringify({
-                    "liked": false
+                    "liked": 'false'
                 }),
                 headers: {
                     'Content-Type': 'application/json'

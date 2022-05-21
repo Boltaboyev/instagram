@@ -127,7 +127,7 @@ def follow(subscribed_id):
     return redirect(url_for('home'))
 
 
-@app.route('/like/<int:post_id>')
+@app.route('/like/<int:post_id>', methods=['POST'])
 def like(post_id):
     current_user = get_current_user()
     like = Likes(owner_id=current_user.id,
@@ -136,12 +136,14 @@ def like(post_id):
                                   like_owner=post_id).first()
     complete = request.get_json()['liked']
     print(complete)
-    if complete:
+    if complete=="true":
         db.session.delete(like2)
     else:
         db.session.add(like)
     db.session.commit()
-    return True
+    post = Posts.query.filter_by(id=post_id).first()
+    print(post.post_like)
+    return 'True'
 
 
 @app.route('/explore')
