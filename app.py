@@ -1,6 +1,6 @@
 from urllib import request
 
-from flask import Flask, redirect, url_for, render_template, session, request
+from flask import Flask, redirect, url_for, render_template, session, request, jsonify
 import re
 from flask import Flask, redirect, url_for, render_template
 from flask import Flask, redirect, url_for, render_template, flash
@@ -129,21 +129,34 @@ def follow(subscribed_id):
 
 @app.route('/like/<int:post_id>', methods=['POST'])
 def like(post_id):
+    object={}
+    object['like'] = 0
     current_user = get_current_user()
     like = Likes(owner_id=current_user.id,
                  like_owner=post_id)
     like2 = Likes.query.filter_by(owner_id=current_user.id,
                                   like_owner=post_id).first()
+    
     complete = request.get_json()['liked']
     print(complete)
-    if complete=="true":
+    if complete=='false':
         db.session.delete(like2)
+        object['like']=-1
+        complete='true'
     else:
+        object['like']=1
         db.session.add(like)
+        complete='false'
+        print(complete)
+    print(object['like'])
     db.session.commit()
+    likes = Likes.query.filter_by(like_owner=post_id).all()
+    count_likes = len(likes)
+    object['count']=count_likes
+    print(count_likes)
     post = Posts.query.filter_by(id=post_id).first()
     print(post.post_like)
-    return 'True'
+    return jsonify(object)
 
 
 @app.route('/explore')
@@ -188,7 +201,10 @@ def view_user(user_id):
 def suggested_users():
     users = Users.query.all()
     current_user = get_current_user()
-    return render_template('suggested_users.html', users=users, current_user=current_user)
+    for user in users:
+
+        subs = Subscriptions.query.filter_by(owner_id=current_user.id, subscriptions_owner2=user.id).first()
+    return render_template('suggested_users.html', users=users, current_user=current_user, subs=subs)
 
 
 @app.route('/remove_img')
