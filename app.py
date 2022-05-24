@@ -1,3 +1,4 @@
+from turtle import pos
 from urllib import request
 
 from flask import Flask, redirect, url_for, render_template, session, request, jsonify
@@ -129,32 +130,38 @@ def follow(subscribed_id):
 
 @app.route('/like/<int:post_id>', methods=['POST'])
 def like(post_id):
-    object={}
-    object['like'] = 0
+    object = {}
+    object['like'] = 'False'
     current_user = get_current_user()
     like = Likes(owner_id=current_user.id,
                  like_owner=post_id)
     like2 = Likes.query.filter_by(owner_id=current_user.id,
                                   like_owner=post_id).first()
-    
+    post = Posts.query.filter_by(id=post_id).first()
     complete = request.get_json()['liked']
     print(complete)
-    if complete=='false':
+    print(post.post_like)
+    if like2:
+        # post.post+like.remove()
         db.session.delete(like2)
-        object['like']=-1
-        complete='true'
+        object['like'] = 'False'
+        complete = 'true'
     else:
-        object['like']=1
+        object['like'] = 'True'
         db.session.add(like)
-        complete='false'
+
+        complete = 'false'
         print(complete)
     print(object['like'])
     db.session.commit()
     likes = Likes.query.filter_by(like_owner=post_id).all()
     count_likes = len(likes)
-    object['count']=count_likes
+    numb_likes = len(post.post_like)
+    Posts.query.filter_by(id=post_id).update({"like_count": numb_likes})
+    db.session.commit()
+    object['count'] = numb_likes
     print(count_likes)
-    post = Posts.query.filter_by(id=post_id).first()
+
     print(post.post_like)
     return jsonify(object)
 
@@ -186,15 +193,14 @@ def user():
     return render_template('user.html', user=user, posts=posts, current_user=current_user)
 
 
-
 @app.route('/view_user/<int:user_id>', methods=["POST", "GET"])
 def view_user(user_id):
     user = Users.query.filter_by(id=user_id).first()
     current_user = get_current_user()
     posts = Posts.query.filter_by(post_owner=user.id).all()
-    subs = Subscriptions.query.filter_by(owner_id=current_user.id, subscriptions_owner2=user.id).first()
+    subs = Subscriptions.query.filter_by(
+        owner_id=current_user.id, subscriptions_owner2=user.id).first()
     return render_template('user.html', user=user, posts=posts, current_user=current_user, subs=subs)
-
 
 
 @app.route('/suggested_users')
@@ -203,7 +209,8 @@ def suggested_users():
     current_user = get_current_user()
     for user in users:
 
-        subs = Subscriptions.query.filter_by(owner_id=current_user.id, subscriptions_owner2=user.id).first()
+        subs = Subscriptions.query.filter_by(
+            owner_id=current_user.id, subscriptions_owner2=user.id).first()
     return render_template('suggested_users.html', users=users, current_user=current_user, subs=subs)
 
 
@@ -253,7 +260,6 @@ def hide_acaunt():
         get_user.post_type = True
         db.session.commit()
     return redirect(url_for('user'))
-
 
 
 manager = Manager(app)

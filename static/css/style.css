@@ -752,6 +752,15 @@ body {
     position: relative;
 }
 
+.owner_post_comment {
+    width: 94.8%;
+    height: 65px;
+    display: flex;
+    align-items: center;
+    padding: 0 1rem;
+    position: relative;
+}
+
 .like_bold {
     height: 30px;
     width: 30px;
@@ -762,7 +771,21 @@ body {
     cursor: pointer;
 }
 
+.comment_bold {
+    height: 30px;
+    width: 30px;
+    margin-right: 20px;
+}
+
+.comment_bold svg {
+    cursor: pointer;
+}
+
 .heart {
+    fill: rgb(41, 41, 41);
+}
+
+.comment {
     fill: rgb(41, 41, 41);
 }
 

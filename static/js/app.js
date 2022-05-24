@@ -28,71 +28,42 @@ if (cancel) {
 
 
 const heart = document.querySelectorAll('.heart');
-let count_like = document.querySelector('.count_like');
+let count_like = document.querySelectorAll('.count_like');
 
-heart.forEach(ht => {
+heart.forEach((ht, index) => {
     ht.addEventListener('click', () => {
-        if (ht.style.fill === 'rgb(41, 41, 41)'){
-            ht.style.fill = 'red'
-            console.log(ht.dataset.id)
-            fetch('/like/' + ht.dataset.id, {
-                
-                method: "POST",
-                body: JSON.stringify({
-                    "liked": 'true'
-                }),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
+        console.log(ht.dataset.id)
+        fetch('/like/' + ht.dataset.id, {
+
+            method: "POST",
+            body: JSON.stringify({
+                "liked": 'true'
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
             .then(function (response) {
                 return response.json()
 
             })
-            .then(function(jsonResponse){
-                count_like.textContent = `${jsonResponse['count']}`
+            .then(function (jsonResponse) {
+                if (count_like[index]) {
+                    count_like[index].textContent = `${jsonResponse['count']}`
+                }
                 console.log(count_like.textContent)
-                // if (jsonResponse['like']===false) {
-                //     ht.style.fill = 'rgb(41, 41, 41)'
-                //     console.log(jsonResponse['like'])
-                //     console.log('black')
-                // } else {
-                //     ht.style.fill = 'red'
-                //     console.log(jsonResponse['like'])
-                //     console.log('red')
-                // }
-            })
-        } else {ht.style.fill = 'rgb(41, 41, 41)'
-            console.log(ht.dataset.id)
-            fetch('/like/' + ht.dataset.id, {
-                
-                method: "POST",
-                body: JSON.stringify({
-                    "liked": 'false'
-                }),
-                headers: {
-                    'Content-Type': 'application/json'
+                if (jsonResponse['like'] === 'False') {
+                    ht.style.fill = 'rgb(41, 41, 41)'
+                    console.log(jsonResponse['like'])
+                    console.log('black')
+                } else {
+                    ht.style.fill = 'red'
+                    console.log(jsonResponse['like'])
+                    console.log('red')
                 }
             })
-            .then(function (response) {
-                return response.json()
 
-            })
-            .then(function(jsonResponse){
-                count_like.textContent = `${jsonResponse['count']}`
-                console.log(count_like.textContent)
-                // if (jsonResponse['like']===false) {
-                //     ht.style.fill = 'rgb(41, 41, 41)'
-                //     console.log(jsonResponse['like'])
-                //     console.log('black')
-                // } else {
-                //     ht.style.fill = 'red'
-                //     console.log(jsonResponse['like'])
-                //     console.log('red')
-                // }
-            })
-        }
-    }) 
+    })
 });
 
 

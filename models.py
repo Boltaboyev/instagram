@@ -23,7 +23,8 @@ class Users(db.Model):
         'Subscriptions', backref='subscriptions_owner', foreign_keys='Subscriptions.subscriptions_owner2')
     subscribers = db.relationship(
         'Subscriptions', backref='subscribers_owner', foreign_keys='Subscriptions.subscribers_owner2')
-    posts = db.relationship("Posts", backref="posts_owner")
+    posts = db.relationship(
+        "Posts", backref="posts_owner", order_by='Posts.id')
 
 
 class Posts(db.Model):
@@ -32,8 +33,10 @@ class Posts(db.Model):
     post_img = db.Column(db.String())
     post_comment = db.Column(db.String())
     post_owner = db.Column(db.Integer, db.ForeignKey('users.id'))
-    post_like = db.relationship("Likes", backref="likes_owner")
+    post_like = db.relationship(
+        "Likes", backref="likes_owner", order_by="Likes.id")
     post_head = db.Column(db.Boolean())
+    like_count = db.Column(db.Integer)
 
 
 class Likes(db.Model):
