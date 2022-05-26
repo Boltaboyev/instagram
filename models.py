@@ -1,3 +1,4 @@
+import datetime
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 
@@ -36,7 +37,11 @@ class Posts(db.Model):
     post_like = db.relationship(
         "Likes", backref="likes_owner", order_by="Likes.id")
     post_head = db.Column(db.Boolean())
+    post_comments = db.relationship(
+        "Comments", backref="comments_owner", order_by="Comments.id")
     like_count = db.Column(db.Integer)
+    comment_count = db.Column(db.Integer)
+    created = db.Column(db.DateTime, default=datetime.datetime.utcnow(), nullable=True)
 
 
 class Likes(db.Model):
@@ -46,9 +51,20 @@ class Likes(db.Model):
     like_owner = db.Column(db.Integer, db.ForeignKey('posts.id'))
 
 
+class Comments(db.Model):
+    __tablename__ = 'comments'
+    id = db.Column(db.Integer, primary_key=True)
+    comment_owner_id = db.Column(db.Integer)
+    comment_post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
+    comment_text = db.Column(db.String())
+    created = db.Column(db.DateTime, default=datetime.datetime.utcnow(), nullable=True)
+
+
+
 class Subscriptions(db.Model):
     __tablename__ = 'subscriptions'
     id = db.Column(db.Integer, primary_key=True)
     owner_id = db.Column(db.Integer)
     subscriptions_owner2 = db.Column(db.Integer, db.ForeignKey('users.id'))
     subscribers_owner2 = db.Column(db.Integer, db.ForeignKey('users.id'))
+    created = db.Column(db.DateTime, default=datetime.datetime.utcnow(), nullable=True)
