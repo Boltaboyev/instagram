@@ -57,7 +57,7 @@ class Comments(db.Model):
     comment_owner_id = db.Column(db.Integer)
     comment_post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
     comment_text = db.Column(db.String())
-    created = db.Column(db.DateTime, default=datetime.datetime.utcnow(), nullable=True)
+    created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow(), nullable=True)
 
 
 

@@ -443,6 +443,30 @@ body {
     z-index: 1000;
 }
 
+.open_post {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform-origin: right;
+    padding: 2em;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.849);
+    width: 100vw;
+    height: 100vh;
+    z-index: 1000;
+}
+
+
+
+
+.open_post_src img {
+    width:900px;
+    height: 675px;
+}
+
+
 .post_ct {
     display: none;
     align-items: center;
@@ -462,6 +486,7 @@ body {
     display: flex;
 }
 
+
 .post_box {
     height: 450px;
     width: 438px;
@@ -473,6 +498,86 @@ body {
     justify-content: center;
     position: relative;
 }
+
+.open_post_box {
+    height: 70vh;
+    width: 438px;
+    background: #fff;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.post_owner_img {
+    position: absolute;
+    top: 20px;
+    left: 30px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 30px;
+}
+
+
+.post_owner_img img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: #000 solid 1px;
+}
+
+.post_owner_name {
+    position: absolute;
+    top: 10px;
+    left: 70px;
+    width: auto;
+    height: 60px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+}
+
+
+
+.post_line {
+    opacity: .6;
+    height: 1px;
+    width: 100%;
+    background: #444;
+    margin-bottom: 50%;
+    position: absolute;
+    top: 70px;
+}
+
+
+.post_line2 {
+    opacity: .6;
+    height: 1px;
+    width: 100%;
+    background: #444;
+    margin-bottom: 50%;
+    position: absolute;
+    bottom: -60px;
+}
+
+
+.post_line3 {
+    opacity: .6;
+    height: 1px;
+    width: 100%;
+    background: #444;
+    margin-bottom: 50%;
+    position: absolute;
+    bottom: -140px;
+}
+
 
 .post_box h3 {
     color: #444;
@@ -700,7 +805,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 0 0 30px;
+    margin: 0 0;
 }
 
 .owner_name {
@@ -754,6 +859,43 @@ body {
     position: relative;
 }
 
+.accurate_like {
+    position: absolute;
+    left: 0px;
+    bottom: 100px;
+}
+
+.accurate_input {
+    position: absolute;
+    left: 0px;
+    bottom: 30px;
+}
+
+.add_comment {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+}
+
+
+.add_comment button {
+    background-color: white;
+    border: none;
+    color: #498cb8;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+
+.add_comment input{
+    width: 80%;
+    height: 100%;
+    text-align: center;
+    border: none;
+    font-size: 15px;
+    outline: none;
+}
+
 .owner_post_comment {
     width: 94.8%;
     height: 65px;
@@ -781,6 +923,10 @@ body {
 
 .comment_bold svg {
     cursor: pointer;
+}
+
+.p_comment {
+    width: 75px;
 }
 
 .heart {

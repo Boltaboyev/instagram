@@ -41,8 +41,8 @@ def home():
         users = Users.query.all()
         owner = Subscriptions.query.filter_by(
             subscriptions_owner2=user.id).all()
-
-        return render_template('home.html', user=user, users=users, owner=owner)
+        posts = Posts.query.all()
+        return render_template('home.html', user=user, users=users, owner=owner, posts=posts)
     return redirect(url_for('login'))
 
 
@@ -164,6 +164,30 @@ def like(post_id):
 
     print(post.post_like)
     return jsonify(object)
+
+
+@app.route('/get_post/<int:post_id>')
+def get_post(post_id):
+    user = get_current_user()
+    users = Users.query.all()
+    print(post_id)
+    post_open = Posts.query.filter_by(id=post_id).first()
+    return render_template('post_open.html', post_open=post_open, user=user, users=users)
+
+
+@app.route('/add_comment/<int:post_id>', methods=['POST'])
+def add_comment(post_id):
+    user = get_current_user()
+    users = Users.query.all()
+    comment_text = request.form.get('comment_text')
+    date_now = datetime.datetime.now()
+    post_open = Posts.query.filter_by(id=post_id).first()
+    if request.method == 'POST':
+        new_comment = Comments(comment_owner_id=user.id, comment_post_id=post_id, comment_text=comment_text, created_at=date_now)
+        db.session.add(new_comment)
+        db.session.commit()
+    return redirect(url_for('get_post', post_id=post_id))
+
 
 
 @app.route('/explore')

@@ -12,6 +12,52 @@ back.addEventListener('click', () => {
 });
 
 
+const comment_icon = document.querySelectorAll('.comment'),
+open_post = document.querySelector('.open_post'),
+back2 = document.querySelector('.back2'),
+open_post_src = document.querySelector('.open_post_src'),
+data_get = document.querySelector('.data_get');
+
+// comment_icon.forEach((comic, index) =>{
+//     comic.addEventListener('click', () => {
+//         open_post.classList.add('display')
+//         fetch('/get_post/' + comic.dataset.id, {
+
+//             method: "POST",
+//             body: JSON.stringify({
+//                 "post_id": comic.dataset.id
+//             }),
+//             headers: {
+//                 'Content-Type': 'application/json'
+//             }
+//         })
+        
+//             // .then(function (response) {
+//             //     return response.json()
+
+//             // })
+//             // .then(function (jsonResponse) {
+//             //     if (open_post_src[index]) {
+//             //         open_post_src[index].textContent = `${{{user1.posts[comic.dataset.id].post_img}}}`
+//             //     }
+//             //     console.log(count_like.textContent)
+//             //     if (jsonResponse['like'] === 'False') {
+//             //         ht.style.fill = 'rgb(41, 41, 41)'
+//             //         console.log(jsonResponse['like'])
+//             //         console.log('black')
+//             //     } else {
+//             //         ht.style.fill = 'red'
+//             //         console.log(jsonResponse['like'])
+//             //         console.log('red')
+//             //     }
+//             // })
+//     })
+//     
+// })
+back2.addEventListener('click', () => {
+            open_post.style.display='none';
+        });
+
 const change_btn = document.querySelector('.img'),
     change_photo = document.querySelector('.change_photo'),
     cancel = document.querySelector('.cancel');
