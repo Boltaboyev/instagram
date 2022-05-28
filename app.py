@@ -1,17 +1,28 @@
 
+from turtle import pos
+from urllib import request
+
+from flask import Flask, redirect, url_for, render_template, session, request, jsonify
+import re
+from flask import Flask, redirect, url_for, render_template
 from flask import Flask, redirect, url_for, render_template, flash
+from werkzeug.security import check_password_hash, generate_password_hash
 
 
 from config import *
 from models import *
+
 from flask_migrate import *
-from flask_script import *
+from flask_script import Manager
+from models import *
+from config import *
+
+from werkzeug.utils import secure_filename
 
 from werkzeug.utils import secure_filename
 
 
 app = Flask(__name__)
-app.config.from_object('config')
 db = setup(app)
 app.config['SECRET_KEY'] = 'dfjkdfohhdfiih'
 
@@ -31,10 +42,31 @@ def get_current_user():
     return user_query
 
 
+app.config.from_object('config')
+
+app.config['SECRET_KEY'] = 'dfjkdfohhdfiih'
+
+
+def get_current_user():
+    user_query = None
+    if 'user' in session:
+        user = session['user']
+        user = Users.query.filter_by(username=user).first()
+        user_query = user
+    return user_query
+
+
 @app.route('/')
 def home():
     user = get_current_user()
-    return render_template('home.html', user=user)
+
+    if user:
+        users = Users.query.all()
+        owner = Subscriptions.query.filter_by(
+            subscriptions_owner2=user.id).all()
+        posts = Posts.query.all()
+        return render_template('home.html', user=user, users=users, owner=owner, posts=posts)
+    return redirect(url_for('login'))
 
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -62,7 +94,9 @@ def register():
         filename = secure_filename(photo.filename)
         photo.save(os.path.join("static/img/person", filename))
         file_url = "static/img/person"
-        result = file_url+'/'+filename
+
+        result = file_url + '/' + filename
+
         if len(email) <= 4:
             flash('Email must be greater than 4 characters', category='error')
         elif len(username) <= 2:
@@ -79,15 +113,117 @@ def register():
             db.session.commit()
 
             flash('Account created', category='success')
-        get_user = Users.query.filter_by(username=username).first()
-        session['user'] = get_user.username
-        return redirect(url_for('login'))
+
+            get_user = Users.query.filter_by(username=username).first()
+            session['user'] = get_user.username
+            return redirect(url_for('login'))
     return render_template('register.html')
 
 
-@app.route('/follow')
-def follow():
-    return render_template('explore.html')
+@app.route('/subscribings/<int:user_id>')
+def subscriber(user_id):
+    current_user = get_current_user()
+    user1 = Users.query.filter_by(id=user_id).first()
+    users = Users.query.all()
+    subscrings = Subscriptions.query.filter_by(owner_id=user1.id).all()
+    return render_template('follow.html', users=users, current_user=current_user, subscrings=subscrings, user1=user1)
+
+
+@app.route('/subscribers/<int:user_id>')
+def subscribers(user_id):
+    current_user = get_current_user()
+    user1 = Users.query.filter_by(id=user_id).first()
+    users = Users.query.all()
+    owner = Subscriptions.query.filter_by(
+        subscriptions_owner2=user1.id).all()
+    return render_template('followers.html', current_user=current_user, users=users, owner=owner, user1=user1)
+
+
+@app.route('/follow/<int:subscribed_id>')
+def follow(subscribed_id):
+    current_user = get_current_user()
+    follow = Subscriptions(owner_id=current_user.id,
+                           subscriptions_owner2=subscribed_id)
+    be_followed = Subscriptions(owner_id=subscribed_id,
+                                subscribers_owner2=current_user.id)
+    db.session.add(follow)
+    db.session.add(be_followed)
+    db.session.commit()
+    return redirect(url_for('home'))
+
+
+@app.route('/like/<int:post_id>', methods=['POST'])
+def like(post_id):
+    object = {}
+    object['like'] = 'False'
+    current_user = get_current_user()
+    like = Likes(owner_id=current_user.id,
+                 like_owner=post_id)
+    like2 = Likes.query.filter_by(owner_id=current_user.id,
+                                  like_owner=post_id).first()
+    post = Posts.query.filter_by(id=post_id).first()
+    complete = request.get_json()['liked']
+    print(complete)
+    print(post.post_like)
+    if like2:
+        # post.post+like.remove()
+        db.session.delete(like2)
+        object['like'] = 'False'
+        complete = 'true'
+    else:
+        object['like'] = 'True'
+        db.session.add(like)
+
+        complete = 'false'
+        print(complete)
+    print(object['like'])
+    db.session.commit()
+    likes = Likes.query.filter_by(like_owner=post_id).all()
+    count_likes = len(likes)
+    numb_likes = len(post.post_like)
+    Posts.query.filter_by(id=post_id).update({"like_count": numb_likes})
+    db.session.commit()
+    object['count'] = numb_likes
+    print(count_likes)
+
+    print(post.post_like)
+    return jsonify(object)
+
+
+@app.route('/get_post/<int:post_id>', methods=['POST'])
+def get_post(post_id):
+    object = {}
+    post_open = Posts.query.filter_by(id=post_id).first()
+    # post_open_owner = Posts.query.filter_by(id=post_id).first().
+    users = Users.query.all()
+    object['post_open_id'] = post_open.id
+    object['post_open_img'] = post_open.post_img
+    object['post_open_owner'] = post_open.post_owner
+    object['post_open_owner_img'] = post_open.posts_owner.img
+    object['post_open_owner_username'] = post_open.posts_owner.username
+    post_open.posts_owner.img
+    # object['users'] = users
+    print(post_open.post_img)
+    print(post_open.post_owner)
+    user = get_current_user()
+    print(post_id)
+
+    return jsonify(object)
+
+
+@app.route('/add_comment/<int:post_id>', methods=['POST'])
+def add_comment(post_id):
+    user = get_current_user()
+    users = Users.query.all()
+    comment_text = request.form.get('comment_text')
+    date_now = datetime.datetime.now()
+    post_open = Posts.query.filter_by(id=post_id).first()
+    if request.method == 'POST':
+        new_comment = Comments(
+            comment_owner_id=user.id, comment_post_id=post_id, comment_text=comment_text)
+        db.session.add(new_comment)
+        db.session.commit()
+        return redirect(url_for('get_post', post_id=post_id))
 
 
 @app.route('/explore')
@@ -95,9 +231,95 @@ def explore():
     return render_template('explore.html')
 
 
-@app.route('/user')
+@app.route('/user', methods=["POST", "GET"])
 def user():
-    return render_template('user.html')
+    current_user = get_current_user()
+    posts = Posts.query.filter_by(post_owner=current_user.id).all()
+    user = Users.query.filter_by(id=current_user.id).first()
+    if request.method == "POST":
+        photo = request.files['update']
+        get_userId = Users.query.filter_by(id=user.id).first()
+
+        if os.path.exists(get_userId.img):
+            os.remove(get_userId.img)
+
+        filename = secure_filename(photo.filename)
+        photo.save(os.path.join("static/img/person", filename))
+        file_url = "static/img/person"
+        result = file_url+'/'+filename
+        Users.query.filter_by(id=user.id).update({"img": result})
+        db.session.commit()
+        return redirect(url_for('user', user=user))
+    return render_template('user.html', user=user, posts=posts, current_user=current_user)
+
+
+@app.route('/view_user/<int:user_id>', methods=["POST", "GET"])
+def view_user(user_id):
+    user = Users.query.filter_by(id=user_id).first()
+    current_user = get_current_user()
+    posts = Posts.query.filter_by(post_owner=user.id).all()
+    subs = Subscriptions.query.filter_by(
+        owner_id=current_user.id, subscriptions_owner2=user.id).first()
+    return render_template('user.html', user=user, posts=posts, current_user=current_user, subs=subs)
+
+
+@app.route('/suggested_users')
+def suggested_users():
+    users = Users.query.all()
+    current_user = get_current_user()
+    for user in users:
+
+        subs = Subscriptions.query.filter_by(
+            owner_id=current_user.id, subscriptions_owner2=user.id).first()
+    return render_template('suggested_users.html', users=users, current_user=current_user, subs=subs)
+
+
+@app.route('/remove_img')
+def remove_img():
+    user = get_current_user()
+    dele_img = Users.query.filter_by(id=user.id).first()
+    dele_img.img = ""
+    db.session.commit()
+
+    return redirect(url_for("user"), user=user)
+
+
+@app.route('/logout')
+def logout():
+    session.pop('user', None)
+    return redirect(url_for('home'))
+
+
+@app.route('/posts', methods=["POST", 'GET'])
+def add_post():
+    user = get_current_user()
+
+    if request.method == 'POST':
+        comment = request.form.get("comment")
+        photo = request.files['post']
+        filename = secure_filename(photo.filename)
+        photo.save(os.path.join("static/img/person", filename))
+        file_url = "static/img/person"
+
+        result = file_url + '/' + filename
+
+        add = Posts(post_img=result, post_owner=user.id, post_comment=comment)
+        db.session.add(add)
+        db.session.commit()
+    return redirect(url_for("user"))
+
+
+@app.route('/hide')
+def hide_acaunt():
+    current_user = get_current_user()
+    get_user = Users.query.filter_by(id=current_user.id).first()
+    if get_user.post_type:
+        get_user.post_type = False
+        db.session.commit()
+    else:
+        get_user.post_type = True
+        db.session.commit()
+    return redirect(url_for('user'))
 
 
 manager = Manager(app)

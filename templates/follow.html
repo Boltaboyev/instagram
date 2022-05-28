@@ -4,56 +4,33 @@
 {% block section %}
     <section class="followers">
         <div class="container">
+            
 
-            <div class="follow_box">
+            {% if current_user %}
+                {% for user in users %}
+                    {% for subscribing in subscrings %}
+                        {%if subscribing.subscriptions_owner2==user.id%}   
+                            <div class="follow_box">
+                                
+                                    <div class="fw_item">
 
-                <div class="fw_item">
+                                        <div class="fw_img">
+                                            <img src="/{{ user.img }}" alt="">
+                                        </div>
 
-                    <div class="fw_img">
-                        <img src="../static/img/person/pic-3.png" alt="">
-                    </div>
+                                        <div class="fw_txt">
+                                            <h2>{{user.username}}</h2>
+                                            <p>You are following</p>
+                                        </div>
 
-                    <div class="fw_txt">
-                        <h2>_Mc_donalds_1985_</h2>
-                        <p>started following you</p>
-                    </div>
-
-                    <a href="#">Follow</a>
-                </div>
-
-
-                <div class="fw_item">
-
-                    <div class="fw_img">
-                        <!-- <img src="../static/img/person/pic-4.png" alt=""> -->
-                    </div>
-
-                    <div class="fw_txt">
-                        <h2>Sofia_liza_999</h2>
-                        <p>started following you</p>
-                    </div>
-
-                    <a href="#">Follow</a>
-                </div>
-
-
-                <div class="fw_item">
-
-                    <div class="fw_img">
-                        <img src="../static/img/person/pic-1.png" alt="">
-                    </div>
-
-                    <div class="fw_txt">
-                        <h2>Turkey.Uz</h2>
-                        <p>started following you</p>
-                    </div>
-
-                    <div class="fw_link">
-                        <a href="#">Follow</a>
-                    </div>
-                </div>
-
-            </div>
+                                        <a href="{{url_for('view_user', user_id=user.id)}}">Watch profile</a>
+                                    </div>
+                                
+                            </div>
+                        {%endif%}
+                    {%endfor%}
+                {% endfor %}
+            {% endif %}
         </div>
 
     </section>
