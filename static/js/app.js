@@ -19,7 +19,9 @@ const comment_icon = document.querySelectorAll('.comment'),
     data_get = document.querySelector('.data_get'),
     post_owner_img = document.querySelector('.post_owner_img'),
     post_owner_name = document.querySelector('.post_owner_name'),
-    like_bold = document.querySelector('.like_bold');
+    post_like_bold = document.querySelector('.post_like_bold'),
+    post_count_like = document.querySelector('.post_count_like'),
+    heart1 = document.querySelector('.heart1');
 
 comment_icon.forEach((comic, index) => {
     comic.addEventListener('click', () => {
@@ -41,16 +43,66 @@ comment_icon.forEach((comic, index) => {
             })
             .then(function (jsonResponse) {
                 console.log(jsonResponse['post_open_img'])
-                console.log(jsonResponse['users'])
+                console.log(comic.dataset.id)
                 open_post_src.innerHTML = `<img src="/${jsonResponse['post_open_img']}" alt="">`
                 post_owner_img.innerHTML = `<img src="/${jsonResponse['post_open_owner_img']}" alt="">`
                 post_owner_name.innerHTML = `<p> <a style="text-decoration:none; color:black" href="{{url_for('view_user', user_id=${jsonResponse['post_open_owner']})}}"><strong>${jsonResponse['post_open_owner_username']}</strong></a></p>`
-                like_bold.innerHTML = `<svg class="heart" data-id="${jsonResponse['post_open_id']}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                <path d="M0 190.9V185.1C0 115.2 50.52 55.58 119.4 44.1C164.1 36.51 211.4 51.37 244 84.02L256 96L267.1 84.02C300.6 51.37 347 36.51 392.6 44.1C461.5 55.58 512 115.2 512 185.1V190.9C512 232.4 494.8 272.1 464.4 300.4L283.7 469.1C276.2 476.1 266.3 480 256 480C245.7 480 235.8 476.1 228.3 469.1L47.59 300.4C17.23 272.1 .0003 232.4 .0003 190.9L0 190.9z"/>
-            </svg>`
-            })
-    })
+                
+                post_count_like.innerHTML = `${jsonResponse['post_open_like_count']}`
 
+                heart1.addEventListener('click', () => {
+                    fetch('/like/' + comic.dataset.id, {
+            
+                        method: "POST",
+                        body: JSON.stringify({
+                            "liked": 'true'
+                        }),
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                        .then(function (response) {
+                            return response.json()
+            
+                        })
+                        .then(function (jsonResponse) {
+                            if (post_count_like) {
+                                post_count_like.textContent = `${jsonResponse['count']} `
+                            }
+                            if (jsonResponse['like'] === 'False') {
+                                heart1.style.fill = 'rgb(41, 41, 41)'
+                                console.log(jsonResponse['like'])
+                                console.log('black')
+                            } else {
+                                heart1.style.fill = 'red'
+                                console.log(jsonResponse['like'])
+                                console.log('red')
+                            }
+                        })
+            })
+            const post_button = document.querySelector('.post_button'),
+                comment_text = document.querySelector('.comment_text'),
+                commented_text = document.querySelector('.commented_text')
+            post_button.addEventListener('click', ()=>{
+                fetch('/add_comment/'+ comic.dataset.id, {
+                    method: "POST",
+                        body: JSON.stringify({
+                            "comment_text": comment_text.value
+                        }),
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                })
+                .then(function (response) {
+                    return response.json()
+    
+                })
+                .then(function (jsonResponse) {
+                    comment_text.innerHTML = `${comment_text.value}`
+                })
+})
+        })
+    })
 })
 back2.addEventListener('click', () => {
     open_post.classList.remove('display');
@@ -109,6 +161,11 @@ heart.forEach((ht, index) => {
 
     })
 });
+
+
+
+
+
 
 
 const post_next = document.querySelector('.post_next'),

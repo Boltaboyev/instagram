@@ -866,6 +866,13 @@ body {
     bottom: 100px;
 }
 
+.accurate_comment {
+    position: absolute;
+    left: 120px;
+    bottom: 100px;
+}
+
+
 .accurate_input {
     position: absolute;
     left: 0px;
@@ -903,7 +910,6 @@ body {
     display: flex;
     align-items: center;
     padding: 0 1rem;
-    position: relative;
 }
 
 .like_bold {
@@ -915,6 +921,18 @@ body {
 .like_bold svg {
     cursor: pointer;
 }
+
+
+.post_like_bold {
+    height: 30px;
+    width: 30px;
+    margin-right: 20px;
+}
+
+.post_like_bold svg {
+    cursor: pointer;
+}
+
 
 .comment_bold {
     height: 30px;
@@ -931,6 +949,10 @@ body {
 }
 
 .heart {
+    fill: rgb(41, 41, 41);
+}
+
+.heart1 {
     fill: rgb(41, 41, 41);
 }
 
