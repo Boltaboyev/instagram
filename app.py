@@ -181,7 +181,7 @@ def like(post_id):
     db.session.commit()
     object['count'] = numb_likes
     lik3 = Likes.query.filter_by(owner_id=current_user.id,
-                                  like_owner=post_id).first()
+                                 like_owner=post_id).first()
     print(lik3)
     return jsonify(object)
 
@@ -189,8 +189,18 @@ def like(post_id):
 @app.route('/get_post/<int:post_id>', methods=['POST'])
 def get_post(post_id):
     object = {}
+    comment_list = []
     post_open = Posts.query.filter_by(id=post_id).first()
+    comments = Comments.query.filter_by(comment_post_id=post_id).all()
+
+    for comment in comments:
+        comment_dict = {}
+        comment_dict['owner_username'] = comment.comments_owner.username
+        comment_dict['owner_img'] = comment.comments_owner.img
+        comment_dict['comment_text'] = comment.comment_text
+        comment_list.append(comment_dict)
     # post_open_owner = Posts.query.filter_by(id=post_id).first().
+
     users = Users.query.all()
     object['post_open_id'] = post_open.id
     object['post_open_img'] = post_open.post_img
@@ -198,13 +208,12 @@ def get_post(post_id):
     object['post_open_owner_img'] = post_open.posts_owner.img
     object['post_open_owner_username'] = post_open.posts_owner.username
     object['post_open_like_count'] = post_open.like_count
+    object['comment_list'] = comment_list
     post_open.posts_owner.img
     # object['users'] = users
-    print(post_open.post_img)
-    print(post_open.post_owner)
-    user = get_current_user()
-    print(post_id)
 
+    user = get_current_user()
+    print(comment_list)
     return jsonify(object)
 
 
@@ -212,24 +221,23 @@ def get_post(post_id):
 def add_comment(post_id):
     user = get_current_user()
     object = {}
-    
     users = Users.query.all()
-    # comment_text = request.get_json()['comment_text']
-    # new_comment = Comments(
-    #     comment_owner_id=user.id, comment_post_id=post_id, comment_text=comment_text)
-    # db.session.add(new_comment)
-    # db.session.commit()
-    # comment = Comments.query.filter_by(comment_post_id=post_id).first()
-    # print()
-    comment_text = request.form.get('comment_text')
-    date_now = datetime.datetime.now()
-    post_open = Posts.query.filter_by(id=post_id).first()
-    if request.method == 'POST':
-        new_comment = Comments(
-            comment_owner_id=user.id, comment_post_id=post_id, comment_text=comment_text, created_at=date_now)
-        db.session.add(new_comment)
-        db.session.commit()
-        return redirect(url_for('get_post', post_id=post_id))
+    comment_text = request.get_json()['comment_text']
+    new_comment = Comments(
+        comment_owner_id=user.id, comment_post_id=post_id, comment_text=comment_text)
+    db.session.add(new_comment)
+    db.session.commit()
+    comment = Comments.query.filter_by(comment_post_id=post_id).first()
+    return jsonify(object)
+    # comment_text = request.form.get('comment_text')
+    # date_now = datetime.datetime.now()
+    # post_open = Posts.query.filter_by(id=post_id).first()
+    # if request.method == 'POST':
+    #     new_comment = Comments(
+    #         comment_owner_id=user.id, comment_post_id=post_id, comment_text=comment_text, created_at=date_now)
+    #     db.session.add(new_comment)
+    #     db.session.commit()
+    #     return redirect(url_for('get_post', post_id=post_id))
 
 
 @app.route('/explore')

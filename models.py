@@ -26,6 +26,8 @@ class Users(db.Model):
         'Subscriptions', backref='subscribers_owner', foreign_keys='Subscriptions.subscribers_owner2')
     posts = db.relationship(
         "Posts", backref="posts_owner", order_by='Posts.id')
+    comments = db.relationship(
+        "Comments", backref="comments_owner", order_by='Comments.id')
 
 
 class Posts(db.Model):
@@ -38,10 +40,11 @@ class Posts(db.Model):
         "Likes", backref="likes_owner", order_by="Likes.id")
     post_head = db.Column(db.Boolean())
     post_comments = db.relationship(
-        "Comments", backref="comments_owner", order_by="Comments.id")
+        "Comments", backref="comments_owner_post", order_by="Comments.id")
     like_count = db.Column(db.Integer)
     comment_count = db.Column(db.Integer)
-    created = db.Column(db.DateTime, default=datetime.datetime.utcnow(), nullable=True)
+    created = db.Column(
+        db.DateTime, default=datetime.datetime.utcnow(), nullable=True)
 
 
 class Likes(db.Model):
@@ -54,11 +57,11 @@ class Likes(db.Model):
 class Comments(db.Model):
     __tablename__ = 'comments'
     id = db.Column(db.Integer, primary_key=True)
-    comment_owner_id = db.Column(db.Integer)
+    comment_owner_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     comment_post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
     comment_text = db.Column(db.String())
-    created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow(), nullable=True)
-
+    created_at = db.Column(
+        db.DateTime, default=datetime.datetime.utcnow(), nullable=True)
 
 
 class Subscriptions(db.Model):
@@ -67,4 +70,5 @@ class Subscriptions(db.Model):
     owner_id = db.Column(db.Integer)
     subscriptions_owner2 = db.Column(db.Integer, db.ForeignKey('users.id'))
     subscribers_owner2 = db.Column(db.Integer, db.ForeignKey('users.id'))
-    created = db.Column(db.DateTime, default=datetime.datetime.utcnow(), nullable=True)
+    created = db.Column(
+        db.DateTime, default=datetime.datetime.utcnow(), nullable=True)

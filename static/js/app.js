@@ -21,7 +21,12 @@ const comment_icon = document.querySelectorAll('.comment'),
     post_owner_name = document.querySelector('.post_owner_name'),
     post_like_bold = document.querySelector('.post_like_bold'),
     post_count_like = document.querySelector('.post_count_like'),
-    heart1 = document.querySelector('.heart1');
+    heart1 = document.querySelector('.heart1'),
+    commented_text = document.querySelector('.commented_text'),
+    comment_owner_img = document.querySelector('.comment_owner_img'),
+    comment_owner_name = document.querySelector('.comment_owner_name'),
+    comment_owner_text = document.querySelector('.comment_owner_text'),
+    comments = document.querySelector('.comments');
 
 comment_icon.forEach((comic, index) => {
     comic.addEventListener('click', () => {
@@ -47,12 +52,27 @@ comment_icon.forEach((comic, index) => {
                 open_post_src.innerHTML = `<img src="/${jsonResponse['post_open_img']}" alt="">`
                 post_owner_img.innerHTML = `<img src="/${jsonResponse['post_open_owner_img']}" alt="">`
                 post_owner_name.innerHTML = `<p> <a style="text-decoration:none; color:black" href="{{url_for('view_user', user_id=${jsonResponse['post_open_owner']})}}"><strong>${jsonResponse['post_open_owner_username']}</strong></a></p>`
-                
+                // comment_owner_img.innerHTML = `<img src="/${jsonResponse['post_open_owner_img']}" alt="">`
                 post_count_like.innerHTML = `${jsonResponse['post_open_like_count']}`
+                console.log(jsonResponse['comment_list'])
+
+                jsonResponse['comment_list'].forEach((element, index) => {
+                    // const commented_owner_name = document.createElement("div"),
+                    //     comment_owner_img = document.createElement("div"),
+                    //     comment_owner_text = document.createElement("div");
+                    comments.innerHTML += `<div class="commented_text"><div class="comment_owner_img">
+                                                    
+                                                    <img style="width: 50px; height: 50px; border-radius: 50%; border: #000 solid 1px;" src="/${element['owner_img']}" alt="">
+                                                </div>
+                                                <div>
+                                                    <p class="comment_owner_name"><strong>${element['owner_username']}</strong></p>
+                                                    <p class="comment_owner_text">${element['comment_text']}</p>
+                                                </div></div>`
+                })
 
                 heart1.addEventListener('click', () => {
                     fetch('/like/' + comic.dataset.id, {
-            
+
                         method: "POST",
                         body: JSON.stringify({
                             "liked": 'true'
@@ -63,7 +83,7 @@ comment_icon.forEach((comic, index) => {
                     })
                         .then(function (response) {
                             return response.json()
-            
+
                         })
                         .then(function (jsonResponse) {
                             if (post_count_like) {
@@ -79,29 +99,29 @@ comment_icon.forEach((comic, index) => {
                                 console.log('red')
                             }
                         })
-            })
-            const post_button = document.querySelector('.post_button'),
-                comment_text = document.querySelector('.comment_text'),
-                commented_text = document.querySelector('.commented_text')
-            post_button.addEventListener('click', ()=>{
-                fetch('/add_comment/'+ comic.dataset.id, {
-                    method: "POST",
+                })
+                const post_button = document.querySelector('.post_button'),
+                    comment_text = document.querySelector('.comment_text')
+
+                post_button.addEventListener('click', () => {
+                    fetch('/add_comment/' + comic.dataset.id, {
+                        method: "POST",
                         body: JSON.stringify({
                             "comment_text": comment_text.value
                         }),
                         headers: {
                             'Content-Type': 'application/json'
                         }
+                    })
+                        .then(function (response) {
+                            return response.json()
+
+                        })
+                        .then(function (jsonResponse) {
+                            comment_text.innerHTML = ``
+                        })
                 })
-                .then(function (response) {
-                    return response.json()
-    
-                })
-                .then(function (jsonResponse) {
-                    comment_text.innerHTML = `${comment_text.value}`
-                })
-})
-        })
+            })
     })
 })
 back2.addEventListener('click', () => {
