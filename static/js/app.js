@@ -30,6 +30,7 @@ const comment_icon = document.querySelectorAll('.comment'),
 
 comment_icon.forEach((comic, index) => {
     comic.addEventListener('click', () => {
+        comments.innerHTML = ''
         open_post.classList.add('display')
         fetch('/get_post/' + comic.dataset.id, {
 
@@ -118,7 +119,19 @@ comment_icon.forEach((comic, index) => {
 
                         })
                         .then(function (jsonResponse) {
-                            comment_text.innerHTML = ``
+                            jsonResponse['comment_text']
+                            const para = document.createElement("div");
+                            para.innerHTML = `<div class="comment_owner_img">
+                                                    
+                                <img style="width: 50px; height: 50px; border-radius: 50%; border: #000 solid 1px;" src="/${jsonResponse['owner_img']}" alt="">
+                            </div>
+                            <div>
+                                <p class="comment_owner_name"><strong>${jsonResponse['owner_username']}</strong></p>
+                                <p class="comment_owner_text">${jsonResponse['comment_text']}</p>
+                            </div>`;
+                            para.style.cssText = "width: 92%; background-color: #666; background: #fff; display: flex; border: #000 solid 2px; border-radius: 5px; padding: 0 12px;"
+                            document.querySelector('.comments').appendChild(para)
+                            comment_text.value = ''
                         })
                 })
             })

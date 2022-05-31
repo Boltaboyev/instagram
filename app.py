@@ -182,7 +182,6 @@ def like(post_id):
     object['count'] = numb_likes
     lik3 = Likes.query.filter_by(owner_id=current_user.id,
                                  like_owner=post_id).first()
-    print(lik3)
     return jsonify(object)
 
 
@@ -213,7 +212,6 @@ def get_post(post_id):
     # object['users'] = users
 
     user = get_current_user()
-    print(comment_list)
     return jsonify(object)
 
 
@@ -228,6 +226,9 @@ def add_comment(post_id):
     db.session.add(new_comment)
     db.session.commit()
     comment = Comments.query.filter_by(comment_post_id=post_id).first()
+    object['owner_username'] = user.username
+    object['owner_img'] = user.img
+    object['comment_text'] = comment_text
     return jsonify(object)
     # comment_text = request.form.get('comment_text')
     # date_now = datetime.datetime.now()
