@@ -1,6 +1,7 @@
-{% for user in users %}
-    {%if user.id != current_user.id and not subs %}
-        <a href="{{url_for('view_user', user_id=user.id)}}">{{user.username}}</a>
-        <a href="{{url_for('follow', subscribed_id=user.id)}}">Follow</a>
-    {%endif%}
-{% endfor %}
+{%extends 'main.html'%}
+
+{% block section %}
+    {% for sub in subs %}
+        {{sub.subscriptions_owner2}}
+    {% endfor %}
+{%endblock%}

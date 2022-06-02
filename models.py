@@ -1,6 +1,8 @@
 import datetime
+from time import timezone
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from sqlalchemy.sql import func
 
 db = SQLAlchemy()
 
@@ -44,7 +46,7 @@ class Posts(db.Model):
     like_count = db.Column(db.Integer)
     comment_count = db.Column(db.Integer)
     created = db.Column(
-        db.DateTime, default=datetime.datetime.utcnow(), nullable=True)
+        db.DateTime(timezone=True), default=func.now(), nullable=True)
 
 
 class Likes(db.Model):
@@ -61,7 +63,7 @@ class Comments(db.Model):
     comment_post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
     comment_text = db.Column(db.String())
     created_at = db.Column(
-        db.DateTime, default=datetime.datetime.utcnow(), nullable=True)
+        db.DateTime(timezone=True), default=func.now(), nullable=True)
 
 
 class Subscriptions(db.Model):
@@ -71,4 +73,4 @@ class Subscriptions(db.Model):
     subscriptions_owner2 = db.Column(db.Integer, db.ForeignKey('users.id'))
     subscribers_owner2 = db.Column(db.Integer, db.ForeignKey('users.id'))
     created = db.Column(
-        db.DateTime, default=datetime.datetime.utcnow(), nullable=True)
+        db.DateTime(timezone=True), default=func.now(), nullable=True)

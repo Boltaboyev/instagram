@@ -1,4 +1,5 @@
 
+from datetime import timedelta
 from turtle import pos
 from urllib import request
 
@@ -191,12 +192,27 @@ def get_post(post_id):
     comment_list = []
     post_open = Posts.query.filter_by(id=post_id).first()
     comments = Comments.query.filter_by(comment_post_id=post_id).all()
-
+    
     for comment in comments:
         comment_dict = {}
+        comment_differ_str = ''
         comment_dict['owner_username'] = comment.comments_owner.username
         comment_dict['owner_img'] = comment.comments_owner.img
         comment_dict['comment_text'] = comment.comment_text
+        comment_dict['commented_at'] = comment.created_at
+        comment_dict['now'] = datetime.datetime.now()
+        
+        comment_differ =  datetime.datetime.now() - comment.created_at
+        if comment_differ < timedelta(minutes=60):
+            comment_differ_str = str(int(comment_differ.total_seconds()/60)) + 'm'
+        elif comment_differ < timedelta(hours=24):
+            comment_differ_str = str(int(comment_differ.total_seconds()/3600)) + 'h'
+        elif comment_differ < timedelta(days=30):
+            comment_differ_str = str(int(comment_differ.total_seconds()/86400)) + 'd'
+        else:
+            comment_differ_str = 'a long time'
+        comment_dict['comment_differ_str'] = comment_differ_str
+        # comment_dict['commented_ago'] = comment_differ
         comment_list.append(comment_dict)
     # post_open_owner = Posts.query.filter_by(id=post_id).first().
 
@@ -282,11 +298,10 @@ def view_user(user_id):
 def suggested_users():
     users = Users.query.all()
     current_user = get_current_user()
-    for user in users:
-
-        subs = Subscriptions.query.filter_by(
-            owner_id=current_user.id, subscriptions_owner2=user.id).first()
-    return render_template('suggested_users.html', users=users, current_user=current_user, subs=subs)
+    user = Users.query.filter_by(id=current_user.id).first()
+    
+    subs = Subscriptions.query.filter_by(owner_id=current_user.id).all()
+    return render_template('suggested_users.html', users=users, current_user=current_user, subs=subs, user=user)
 
 
 @app.route('/remove_img')

@@ -967,6 +967,14 @@ body {
     cursor: pointer;
 }
 
+
+.comment_time {
+    color: #666;
+    font-size: smaller;
+    font-style: italic;
+}
+
+
 .comments {
     display: flex;
     flex-direction: column;
@@ -984,7 +992,7 @@ body {
     background-color: #666;
     background: #fff;
     display: flex;
-    border: #000 solid 2px;
+    border: #000 solid 1px;
     border-radius: 5px;
     padding: 0 12px;
 

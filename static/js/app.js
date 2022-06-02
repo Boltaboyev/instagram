@@ -48,19 +48,18 @@ comment_icon.forEach((comic, index) => {
 
             })
             .then(function (jsonResponse) {
-                console.log(jsonResponse['post_open_img'])
-                console.log(comic.dataset.id)
                 open_post_src.innerHTML = `<img src="/${jsonResponse['post_open_img']}" alt="">`
                 post_owner_img.innerHTML = `<img src="/${jsonResponse['post_open_owner_img']}" alt="">`
                 post_owner_name.innerHTML = `<p> <a style="text-decoration:none; color:black" href="{{url_for('view_user', user_id=${jsonResponse['post_open_owner']})}}"><strong>${jsonResponse['post_open_owner_username']}</strong></a></p>`
                 // comment_owner_img.innerHTML = `<img src="/${jsonResponse['post_open_owner_img']}" alt="">`
                 post_count_like.innerHTML = `${jsonResponse['post_open_like_count']}`
                 console.log(jsonResponse['comment_list'])
-
+                console.log(comic.dataset.id)
                 jsonResponse['comment_list'].forEach((element, index) => {
                     // const commented_owner_name = document.createElement("div"),
                     //     comment_owner_img = document.createElement("div"),
                     //     comment_owner_text = document.createElement("div");
+                    console.log(element['commented_ago'])
                     comments.innerHTML += `<div class="commented_text"><div class="comment_owner_img">
                                                     
                                                     <img style="width: 50px; height: 50px; border-radius: 50%; border: #000 solid 1px;" src="/${element['owner_img']}" alt="">
@@ -68,6 +67,7 @@ comment_icon.forEach((comic, index) => {
                                                 <div>
                                                     <p class="comment_owner_name"><strong>${element['owner_username']}</strong></p>
                                                     <p class="comment_owner_text">${element['comment_text']}</p>
+                                                    <p  class="comment_time">${element['comment_differ_str']} ago</p>
                                                 </div></div>`
                 })
 
@@ -121,6 +121,7 @@ comment_icon.forEach((comic, index) => {
                         .then(function (jsonResponse) {
                             jsonResponse['comment_text']
                             const para = document.createElement("div");
+                            console.log(comic.dataset.id)
                             para.innerHTML = `<div class="comment_owner_img">
                                                     
                                 <img style="width: 50px; height: 50px; border-radius: 50%; border: #000 solid 1px;" src="/${jsonResponse['owner_img']}" alt="">
@@ -128,6 +129,7 @@ comment_icon.forEach((comic, index) => {
                             <div>
                                 <p class="comment_owner_name"><strong>${jsonResponse['owner_username']}</strong></p>
                                 <p class="comment_owner_text">${jsonResponse['comment_text']}</p>
+                                <p  class="comment_time">0m ago</p>
                             </div>`;
                             para.style.cssText = "width: 92%; background-color: #666; background: #fff; display: flex; border: #000 solid 2px; border-radius: 5px; padding: 0 12px;"
                             document.querySelector('.comments').appendChild(para)
