@@ -1072,6 +1072,12 @@ body {
     font-family: system-ui;
 }
 
+.suggested_users {
+    position: absolute;
+    top: 250px;
+    right: 340px;
+}
+
 .suggest_line {
     height: 1px;
     width: 100%;

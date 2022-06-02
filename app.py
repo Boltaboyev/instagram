@@ -60,13 +60,21 @@ def get_current_user():
 @app.route('/')
 def home():
     user = get_current_user()
-
+    followed_users = []
     if user:
-        users = Users.query.all()
+        users = Users.query.filter(Users.id != user.id).all()
         owner = Subscriptions.query.filter_by(
-            subscriptions_owner2=user.id).all()
+            subscribers_owner2=user.id).all()
+        owner_get = Subscriptions.query.filter(
+            Subscriptions.subscribers_owner2 == user.id).all()
         posts = Posts.query.all()
-        return render_template('home.html', user=user, users=users, owner=owner, posts=posts)
+        for item in owner_get:
+            followed_users.append(item.owner_id)
+        followed_users.append(user.id)
+        suggested_users = Users.query.filter(~Users.id.in_(
+            [user_id for user_id in followed_users])).all()
+        print(suggested_users)
+        return render_template('home.html', owner_get=owner_get, user=user, users=users, owner=owner, posts=posts, suggested_users=suggested_users)
     return redirect(url_for('login'))
 
 
@@ -123,30 +131,31 @@ def register():
 
 @app.route('/subscribings/<int:user_id>')
 def subscriber(user_id):
-    current_user = get_current_user()
-    user1 = Users.query.filter_by(id=user_id).first()
+    user = get_current_user()
+    user2 = Users.query.filter_by(id=user_id).first()
     users = Users.query.all()
-    subscrings = Subscriptions.query.filter_by(owner_id=user1.id).all()
-    return render_template('follow.html', users=users, current_user=current_user, subscrings=subscrings, user1=user1)
+    subscrings = Subscriptions.query.filter_by(
+        subscribers_owner2=user.id).all()
+    return render_template('follow.html', users=users, user=user, subscrings=subscrings, user2=user2)
 
 
 @app.route('/subscribers/<int:user_id>')
 def subscribers(user_id):
-    current_user = get_current_user()
-    user1 = Users.query.filter_by(id=user_id).first()
+    user = get_current_user()
+    user2 = Users.query.filter_by(id=user_id).first()
     users = Users.query.all()
     owner = Subscriptions.query.filter_by(
-        subscriptions_owner2=user1.id).all()
-    return render_template('followers.html', current_user=current_user, users=users, owner=owner, user1=user1)
+        subscriptions_owner2=user.id).all()
+    return render_template('followers.html', user=user, users=users, owner=owner, user2=user2)
 
 
 @app.route('/follow/<int:subscribed_id>')
 def follow(subscribed_id):
-    current_user = get_current_user()
-    follow = Subscriptions(owner_id=current_user.id,
+    user = get_current_user()
+    follow = Subscriptions(owner_id=user.id,
                            subscriptions_owner2=subscribed_id)
     be_followed = Subscriptions(owner_id=subscribed_id,
-                                subscribers_owner2=current_user.id)
+                                subscribers_owner2=user.id)
     db.session.add(follow)
     db.session.add(be_followed)
     db.session.commit()
@@ -186,13 +195,13 @@ def like(post_id):
     return jsonify(object)
 
 
-@app.route('/get_post/<int:post_id>', methods=['POST'])
+@app.route('/get_post/<int:post_id>', methods=['POST', 'GET'])
 def get_post(post_id):
     object = {}
     comment_list = []
     post_open = Posts.query.filter_by(id=post_id).first()
     comments = Comments.query.filter_by(comment_post_id=post_id).all()
-    
+
     for comment in comments:
         comment_dict = {}
         comment_differ_str = ''
@@ -201,14 +210,17 @@ def get_post(post_id):
         comment_dict['comment_text'] = comment.comment_text
         comment_dict['commented_at'] = comment.created_at
         comment_dict['now'] = datetime.datetime.now()
-        
-        comment_differ =  datetime.datetime.now() - comment.created_at
+
+        comment_differ = datetime.datetime.now() - comment.created_at
         if comment_differ < timedelta(minutes=60):
-            comment_differ_str = str(int(comment_differ.total_seconds()/60)) + 'm'
+            comment_differ_str = str(
+                int(comment_differ.total_seconds()/60)) + 'm'
         elif comment_differ < timedelta(hours=24):
-            comment_differ_str = str(int(comment_differ.total_seconds()/3600)) + 'h'
+            comment_differ_str = str(
+                int(comment_differ.total_seconds()/3600)) + 'h'
         elif comment_differ < timedelta(days=30):
-            comment_differ_str = str(int(comment_differ.total_seconds()/86400)) + 'd'
+            comment_differ_str = str(
+                int(comment_differ.total_seconds()/86400)) + 'd'
         else:
             comment_differ_str = 'a long time'
         comment_dict['comment_differ_str'] = comment_differ_str
@@ -224,6 +236,22 @@ def get_post(post_id):
     object['post_open_owner_username'] = post_open.posts_owner.username
     object['post_open_like_count'] = post_open.like_count
     object['comment_list'] = comment_list
+    if post_open.created:
+        post_differ = datetime.datetime.now() - post_open.created
+        post_differ_str = ''
+        if post_differ < timedelta(minutes=60):
+            post_differ_str = str(
+                int(post_differ.total_seconds()/60)) + 'm'
+        elif post_differ < timedelta(hours=24):
+            post_differ_str = str(
+                int(post_differ.total_seconds()/3600)) + 'h'
+        elif post_differ < timedelta(days=30):
+            post_differ_str = str(
+                int(post_differ.total_seconds()/86400)) + 'd'
+        else:
+            post_differ_str = 'a long time'
+        object['post_differ_str'] = post_differ_str
+        object['post_open_date'] = post_open.created
     post_open.posts_owner.img
     # object['users'] = users
 
@@ -245,6 +273,10 @@ def add_comment(post_id):
     object['owner_username'] = user.username
     object['owner_img'] = user.img
     object['comment_text'] = comment_text
+    post = Posts.query.filter_by(id=post_id).first()
+    numb_comments = len(post.post_comments)
+    Posts.query.filter_by(id=post_id).update({"comment_count": numb_comments})
+    db.session.commit()
     return jsonify(object)
     # comment_text = request.form.get('comment_text')
     # date_now = datetime.datetime.now()
@@ -298,8 +330,7 @@ def view_user(user_id):
 def suggested_users():
     users = Users.query.all()
     current_user = get_current_user()
-    user = Users.query.filter_by(id=current_user.id).first()
-    
+
     subs = Subscriptions.query.filter_by(owner_id=current_user.id).all()
     return render_template('suggested_users.html', users=users, current_user=current_user, subs=subs, user=user)
 

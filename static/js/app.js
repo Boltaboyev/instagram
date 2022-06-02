@@ -26,21 +26,20 @@ const comment_icon = document.querySelectorAll('.comment'),
     comment_owner_img = document.querySelector('.comment_owner_img'),
     comment_owner_name = document.querySelector('.comment_owner_name'),
     comment_owner_text = document.querySelector('.comment_owner_text'),
-    comments = document.querySelector('.comments');
 
+    comments = document.querySelector('.comments');
 comment_icon.forEach((comic, index) => {
     comic.addEventListener('click', () => {
         comments.innerHTML = ''
         open_post.classList.add('display')
-        fetch('/get_post/' + comic.dataset.id, {
+        let post_id = comic.dataset.id
+        const controller = new AbortController()
+        const signal = controller.signal
+        fetch('/get_post/' + post_id, {
 
-            method: "POST",
-            body: JSON.stringify({
-                "post_id": comic.dataset.id
-            }),
-            headers: {
-                'Content-Type': 'application/json'
-            }
+            method: "GET",
+            signal: signal
+
         })
 
             .then(function (response) {
@@ -53,6 +52,10 @@ comment_icon.forEach((comic, index) => {
                 post_owner_name.innerHTML = `<p> <a style="text-decoration:none; color:black" href="{{url_for('view_user', user_id=${jsonResponse['post_open_owner']})}}"><strong>${jsonResponse['post_open_owner_username']}</strong></a></p>`
                 // comment_owner_img.innerHTML = `<img src="/${jsonResponse['post_open_owner_img']}" alt="">`
                 post_count_like.innerHTML = `${jsonResponse['post_open_like_count']}`
+                const post_time = document.createElement("div")
+                post_time.innerHTML = `${jsonResponse['post_differ_str']} ago`;
+                post_time.style.cssText = "position: absolute; left: 20px; bottom: 100px; font-style:italic; color: #666; font-size: smaller;"
+                document.querySelector('.third_raw').appendChild(post_time)
                 console.log(jsonResponse['comment_list'])
                 console.log(comic.dataset.id)
                 jsonResponse['comment_list'].forEach((element, index) => {
@@ -72,7 +75,7 @@ comment_icon.forEach((comic, index) => {
                 })
 
                 heart1.addEventListener('click', () => {
-                    fetch('/like/' + comic.dataset.id, {
+                    fetch('/like/' + post_id, {
 
                         method: "POST",
                         body: JSON.stringify({
@@ -105,7 +108,7 @@ comment_icon.forEach((comic, index) => {
                     comment_text = document.querySelector('.comment_text')
 
                 post_button.addEventListener('click', () => {
-                    fetch('/add_comment/' + comic.dataset.id, {
+                    fetch('/add_comment/' + post_id, {
                         method: "POST",
                         body: JSON.stringify({
                             "comment_text": comment_text.value
@@ -121,7 +124,7 @@ comment_icon.forEach((comic, index) => {
                         .then(function (jsonResponse) {
                             jsonResponse['comment_text']
                             const para = document.createElement("div");
-                            console.log(comic.dataset.id)
+                            console.log(post_id)
                             para.innerHTML = `<div class="comment_owner_img">
                                                     
                                 <img style="width: 50px; height: 50px; border-radius: 50%; border: #000 solid 1px;" src="/${jsonResponse['owner_img']}" alt="">
@@ -136,12 +139,16 @@ comment_icon.forEach((comic, index) => {
                             comment_text.value = ''
                         })
                 })
+
             })
+        back2.addEventListener('click', () => {
+            open_post.classList.remove('display');
+            post_id = 0;
+            controller.abort();
+        });
     })
 })
-back2.addEventListener('click', () => {
-    open_post.classList.remove('display');
-});
+
 
 const change_btn = document.querySelector('.img'),
     change_photo = document.querySelector('.change_photo'),

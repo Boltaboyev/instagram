@@ -6,24 +6,24 @@
         <div class="container">
             
 
-            {% if current_user %}
-                {% for user in users %}
+            {% if user %}
+                {% for user1 in users %}
                     {% for subscribing in subscrings %}
-                        {%if subscribing.subscriptions_owner2==user.id%}   
+                        {%if subscribing.owner_id==user1.id%}   
                             <div class="follow_box">
                                 
                                     <div class="fw_item">
 
                                         <div class="fw_img">
-                                            <img src="/{{ user.img }}" alt="">
+                                            <img src="/{{ user1.img }}" alt="">
                                         </div>
 
                                         <div class="fw_txt">
-                                            <h2>{{user.username}}</h2>
+                                            <h2>{{user1.username}}</h2>
                                             <p>You are following</p>
                                         </div>
 
-                                        <a href="{{url_for('view_user', user_id=user.id)}}">Watch profile</a>
+                                        <a href="{{url_for('view_user', user_id=user1.id)}}">Watch profile</a>
                                     </div>
                                 
                             </div>
