@@ -26,7 +26,7 @@ const comment_icon = document.querySelectorAll('.comment'),
     comment_owner_img = document.querySelector('.comment_owner_img'),
     comment_owner_name = document.querySelector('.comment_owner_name'),
     comment_owner_text = document.querySelector('.comment_owner_text'),
-
+    post_time = document.querySelector('.post_time')
     comments = document.querySelector('.comments');
 comment_icon.forEach((comic, index) => {
     comic.addEventListener('click', () => {
@@ -52,9 +52,9 @@ comment_icon.forEach((comic, index) => {
                 post_owner_name.innerHTML = `<p> <a style="text-decoration:none; color:black" href="{{url_for('view_user', user_id=${jsonResponse['post_open_owner']})}}"><strong>${jsonResponse['post_open_owner_username']}</strong></a></p>`
                 // comment_owner_img.innerHTML = `<img src="/${jsonResponse['post_open_owner_img']}" alt="">`
                 post_count_like.innerHTML = `${jsonResponse['post_open_like_count']}`
-                const post_time = document.createElement("div")
+                
                 post_time.innerHTML = `${jsonResponse['post_differ_str']} ago`;
-                post_time.style.cssText = "position: absolute; left: 20px; bottom: 100px; font-style:italic; color: #666; font-size: smaller;"
+                
                 document.querySelector('.third_raw').appendChild(post_time)
                 console.log(jsonResponse['comment_list'])
                 console.log(comic.dataset.id)

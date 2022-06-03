@@ -15,12 +15,6 @@
                         </div>
                         <p>{{ user.username }}</p>
                     </div>
-                    <a href="{{ url_for('subscriber', user_id=user.id) }}">Your friends</a>
-                    <br>
-                    <a href="{{ url_for('subscribers', user_id=user.id) }}">Subscribers</a>
-                    <br>
-                    <a href="{{ url_for('suggested_users') }}">Suggested friends</a>
-
                 </div>
             {% endif %}
 
@@ -104,6 +98,7 @@
                             </div>
                             <p class="p_comment"><span class="count_comment"></span> comments</p>
                         </div> 
+                        <div class="post_time" style="position: absolute; left: 20px; bottom: 100px; font-style:italic; color: #666; font-size: smaller;"></div>
                     </div>  
                     <div class="post_line3"></div>
                     <div class="add_comment accurate_input">
@@ -130,12 +125,23 @@
 
     </section>
     <section class="suggested_users">
-        <div>
+        <div style="background-color:white">
             <h3>Suggestions For You </h3>
             <br>
             {% for user1 in suggested_users %}
-                <div>
-                    {{user1.username}} <a href="{{url_for('follow', subscribed_id=user1.id) }}">Follow</a>
+                <div class=suggested_user>
+                    <div class="follow_box">
+                        <div class="fw_item">
+                            <div class="fw_img">
+                                <img src="/{{ user1.img }}" alt="">
+                            </div>
+                            <div class="fw_txt">
+                                <h2>{{user1.username}}</h2>
+                                <p>You are following</p>
+                            </div>
+                            <a href="{{url_for('follow', subscribed_id=user1.id) }}">Follow</a>
+                        </div>
+                    </div>
                 </div>
             {% endfor %}
         </div>

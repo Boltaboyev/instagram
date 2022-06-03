@@ -975,6 +975,8 @@ body {
 }
 
 
+
+
 .comments {
     display: flex;
     flex-direction: column;
@@ -995,7 +997,6 @@ body {
     border: #000 solid 1px;
     border-radius: 5px;
     padding: 0 12px;
-
 }
 
 .p_comment {
@@ -1074,8 +1075,22 @@ body {
 
 .suggested_users {
     position: absolute;
-    top: 250px;
-    right: 340px;
+    top: 240px;
+    right: 240px;
+    background-color: white;
+    height: 50vh;
+    width: 20vw;
+    border: solid rgb(201, 193, 193) 1px;
+    border-radius: 10px;
+}
+.suggested_users div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.suggested_user {
+    
 }
 
 .suggest_line {
